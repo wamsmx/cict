@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <link href="/static/media/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<meta charset="UTF-8">
+<title>
+  {% block title %}
+  el titulo
+  {% endblock %}
+</title>
+</head>
+
+<body>
+  <div>
+    <div style="color:blue;" class="header">
+      <h3>
+      {% block header %}
+      el encabezado
+      {% endblock %}
+      </h3>
+    </div>
+    <div class="content">
+      {% block content %}
+      El contenido
+      {% endblock %}
+    </div>
+    <div class="footer">
+      {% block footer %}
+      el pie de pagina
+      {% endblock %}
+      &copy; Facultad de Ingeniería Eléctrica
+    </div>
+  </div>
+</body>
+</html>

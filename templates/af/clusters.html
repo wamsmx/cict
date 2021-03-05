@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block header %}
+<h1>Examples from FNET: {{d}}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="tabs">
+{% for tab in tabs %}
+<!--<a href="/cict/app/clusters/{{event}}/">{{event}}<a/>-->
+<input type="radio" name="tabset" id="{{tab.id}}" {% if tab.active %} checked {% endif %}>
+  <label for="{{tab.id}}">
+    <span style="font-family: 'Press Start 2P';  font-size: 16px; color:white;">{{tab.name}}</span>
+  </label>
+  <div class="tab">
+    <table>
+      <tr><td>{{tab.fig|safe}}</td></td>
+    <tr><td>{{tab.table|safe}}</td></tr>
+    </table>
+  </div>
+  {% endfor %}
+  </div>
+<!--{fig|safe}}-->
+{% endblock %}
+{% block footer %}
+{% endblock %}
