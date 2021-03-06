@@ -1,0 +1,83 @@
+.tabs {
+    display: flex;
+    flex-wrap: wrap; // make sure it wraps
+}
+.tabs label {
+    order: 1; // Put the labels first
+	      display: block;
+    padding: 0.5rem 1.0rem;
+    margin-right: 0.2rem;
+    cursor: pointer;
+    background: #90CAF9;
+    font-weight: bold;
+    transition: background ease 0.2s;
+}
+.tabs .tab {
+    order: 99; // Put the tabs last
+	       flex-grow: 1;
+    width: 100%;
+    display: none;
+    padding: 1rem;
+    background: #fff;
+}
+.tabs input[type="radio"] {
+    display: none;
+}
+.tabs input[type="radio"]:checked + label {
+        background: #447fff;
+}
+.tabs input[type="radio"]:checked + label + .tab {
+    display: block;
+}
+
+@media (max-width: 45em) {
+    .tabs .tab,
+    .tabs label {
+	order: initial;
+    }
+    .tabs label {
+	width: 100%;
+	margin-right: 0;
+	margin-top: 0.2rem;
+    }
+}
+
+/**
+ * Generic Styling
+ */
+body {
+    background: #eee;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding-top: 10vh;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida G
+rande", sans-serif;
+    font-weight: 300;
+    line-height: 1.5;
+    max-width: 60rem;
+    margin: 0 auto;
+    font-size: 112%;
+}
+
+table.dataframe {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.dataframe td, #dataframe th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+table.dataframe tr:nth-child(even){background-color: #f2f2f2;}
+
+table.dataframe tr:hover {background-color: #ddd;}
+
+table.dataframe th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #215EAF;
+    color: white;
+}
