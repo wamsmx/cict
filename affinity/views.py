@@ -18,7 +18,7 @@ def clusters(request, d='20200716_035506'):
     gd='data/units_gps.csv'
     gd=os.path.join(BASE_DIR,gd)
     for i,event in enumerate(events):
-        fn=f"data/Gentrip/data_{event}.csv"
+        fn=f"data/data_{event}.csv"
         fn=os.path.join(BASE_DIR,fn)
         fig,table=plotMap(fn,gd)
         tabs.append({'id':event, 'name':event, 'fig':fig.to_html(),
