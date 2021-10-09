@@ -1,0 +1,289 @@
+{% extends "basecats.html" %}
+{% block title %}
+        Home
+{% endblock %}
+{% block content %}
+{% load static %}
+
+<section class="container">
+
+
+          <section class="about-ct" >
+                <div class="about">
+                
+                        <h2>About ROMA’s project</h2>
+
+                        <p> The oscillations' monitoring and analytics (ROMA) project is operated by the University of Mexico (UNAM, in Spanish) 
+                                located in Mexico City, the Michoacan State University (MSU) located in Morelia, and the Nuevo Leon State University (NLSU) 
+                                located in Monterrey. ROMA is supported by the <a href="http://powerit.utk.edu/" target="_blank">Power Information Technology Laboratory </a>
+                                at the <a href="https://www.utk.edu/" target="_blank"> University of Tennessee </a>, in 
+                                special by the <a href="https://powerit.utk.edu/fnet.html" target="_blank">FNET/GridEye</a> project. ROMA is integrated by a time-synchronized wide-area monitoring system (WAMS) based on 
+                                frequency disturbance recorders (FDRs) and phasor measurement units (PMUs) that enable to provide real-time information of 
+                                the power system dynamics, such as their frequency, phase angle, and voltage which are measured at conventional 120 V outlets.
+                                All measurements are continuously transmitted via the Internet to the ROMA server hosted at the Michoacan State University
+                                and collected through a real-time collection of phasor measurements from the low voltage grid into a complex phasor data 
+                                concentrator (PDC) powered by an open source phasor data concentrator, the <a href="https://github.com/GridProtectionAlliance/openPDC" target="_blank">OpenPDC</a>
+                                administered by the <a href="https://www.gridprotectionalliance.org/" target="_blank">Grid Protection Alliance</a>. 
+                        </p>
+                </div>
+
+                <div class="about">
+                        <h2> Research Applications</h2>
+                        <p>                                       
+                                By harnessing the potential of a realistic WAMS in Mexico, the ROMA’s project specifically targets to enrich research 
+                                and provide solutions in power system applications concerning PMUs and data analytics. Specifically, such as:
+                        </p>
+
+                        <ul>
+                                <li>Wide-area frequency visualization and graphic display.</li>
+                                <li>Wide-area angle visualization and graphic display.</li>
+                                <li>Coherency detection by dynamic clustering from wide-area frequency and angle measurements.</li>
+                                <li>Angle stability situational awareness via spectral analysis, localization of oscillation sources, 
+                                        and detection of low-frequency oscillations and phase angle differences.</li>
+                                <li>Angle stability indices via real-time inter-area oscillatory mode identification.</li>
+                                <li>Online data recovery for Multi-channel PMU data processing.</li>
+                                <li>High-dimensionality PMU data reduction through big data analytics.</li>
+                                
+                        </ul>
+                </div>
+
+
+
+        </section >
+
+        <section class='tool-ct'>
+                <h2>Tools Developed</h2>
+
+                <div class="tools">
+                        
+                        <section>
+                                <h3>PMU Real-time Signals</h3>
+                                <a href="/cict/app/signals">
+                                <img src= "{% static 'media/img/PMU_RT.png' %}" height="180" >  </a>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ea assumenda? Vero rerum enim nisi voluptatume</p>
+                        </section>
+
+                        <section>
+                                <h3>Positive Frequency Phasor</h3>
+                                <a href="/cict/app/mapmx/">
+                                        <img src= "{% static 'media/img/MEX_MAP.png' %}" height="180" >  </a>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ea assumenda? Vero rerum enim nisi voluptatume</p>
+                        
+                        </section>
+                        <section>
+                                <h3>Frequency Zones Monitoring</h3>
+                                <a href="/cict/app/Zonemap/">
+                                        <img src= "{% static 'media/img/mex_zones.png' %}" height="180" >  </a>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ea assumenda? Vero rerum enim nisi voluptatume</p>
+                        
+                        </section>
+
+                        <section>
+                                <h3>Clusters</h3>
+                                <a href="/cict/app/clusters/">
+                                        <img src= "{% static 'media/img/clusters.png' %}" height="180" >  </a>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, ea assumenda? Vero rerum enim nisi voluptatume</p>
+                        
+                        </section>
+
+                </div>
+</section>
+
+        <div class="Team-ct">
+                <h2>Team Members</h2>
+                <div class="Team">
+
+                <section class="profile" style="background-color: rgb(221, 228, 241);">
+                        <img src= "{% static 'media/img/Mario.svg' %}" height="140" >
+                        <div>
+                                <div style="display: flex;  align-items: center; height: 1.5rem;">
+                                        <a href="https://www.linkedin.com/in/mario-arrieta-paternina-6144b4126/" style="padding-right: 1rem;" target="_blank">
+                                                <img src="{% static 'media/img/LINKEDIN.png' %}" height="20"> 
+                                        </a>
+                                        <h3>Dr. Mario Roberto Arrieta Paternina </h3>
+                                </div>
+
+                                <p>Dr. Mario Roberto Arrieta Paternina received the B.Eng. and M.Eng. degrees from the National University of Colombia, 
+                                        in 2007 and 2009, respectively, and the D.Sc. degree from Cinvestav, Guadalajara, Mexico, in 2017, all in electrical
+                                        engineering. He was a Visiting Scholar at Rensselaer Polytechnic Institute (RPI) in 2016. He joined the Department of
+                                        Electrical Engineering at Universidad Nacional Autónoma de México (UNAM), in 2017. His current research interests include
+                                        modeling, simulation, control, and digitalization of resilient electric energy transmission and distribution networks.
+                                        Dr. Arrieta-Paternina is a member of the Mexican Research System and the IEEE Power & Energy Society.
+                                </p>                               
+                        
+                         </div>
+        
+                </section>
+
+                <section  class="profile">
+                        <img src= "{% static 'media/img/Zamora.svg' %}" height="140" >
+                        <div>
+                        <div style="display: flex; align-items: center; height: 1.5rem;">
+                                <a href=" https://www.linkedin.com/in/alejandro-zamora-m%C3%A9ndez-37386b63/" style=" padding: 0; margin: 0; padding-right: 1rem;" target="_blank">
+                                        <img src="{% static 'media/img/LINKEDIN.png' %}" height="20"> 
+                                 </a>
+                                <h3>Dr. Alejandro Zamora </h3>  
+                        </div>
+                                <p>
+                                        Alejandro Zamora obtained his B.S. and M.Sc. in Electrical Engineering from Universidad Michoacana de San Nicolas de Hidalgo (UMSNH), 
+                                        Morelia, Mexico, in 2005 and 2008, respectively. He joined the Electrical Engineering Faculty, UMSNH, in 2008, where he is a 
+                                        full-time Professor. He received a Ph.D. degree from CINVESTAV-Guadalajara in 2016. He was a visiting scholar at Washington State
+                                         University in 2015. His current research interests include oscillation monitoring,  modal identification, WAMS applications, 
+                                         the operation and control of power systems. Dr. Zamora-Mendez is a member of the Mexican Research System and the IEEE Power &
+                                          Energy Society.
+                                </p>                             
+                        </div>
+                                             
+                        
+                </section>
+                <section class="profile" style="background-color: rgb(221, 228, 241);">
+                        <img src= "{% static 'media/img/Toledo.svg' %}" height="140" >
+                        <div>
+                                <div style="display: flex; align-items: center; height: 1.5rem;">
+                                        <a href="https://www.linkedin.com/in/carlos-andres-toledo-santos-324286120/" style="padding-right: 1rem;" target="_blank">
+                                                <img src="{% static 'media/img/LINKEDIN.png' %}" height="20"> 
+                                        </a>
+                                        <h3>Carlos Andrés Toledo Santos </h3>                               
+                                </div>
+
+                                
+                                <p>
+                                        Carlos Toledo-Santos obtained in 2019 a B.Eng. in Electrical Engineering from Industrial University of Santander with a Cum Laude 
+                                        distinction and participated in an academic exchange at UNAM in 2018. He is an enthusiastic engineer about how the grid will 
+                                        evolve to accelerate the energy transition. His current research and work interest lie in the intersection of power systems and
+                                        software engineering including FACTS, WAMPS, power systems analysis and web application development.
+                                </p>
+
+                        </div>
+                </section>
+
+                <section class="profile">
+                        <img src= "{% static 'media/img/Rodrigo.svg' %}" height="140" >
+                        <div>
+                                <div style="display: flex; align-items: center; height: 1.5rem;">
+                                        <a href="#" style="padding-right: 1rem;">
+                                                <img src="{% static 'media/img/LINKEDIN.png' %}" height="20"> 
+                                         </a>
+                                         <h3>Rodrigo Reyes </h3>                               
+                                </div>
+                        
+                                <p>
+                                        Rodrigo Reyes obtained his B.S and M.Sc. in Electrical Engineering from National Polytechnic Institute (IPN), 
+                                        CdMx, Mexico, in 2008 and 2014 respectively. From 2009 to 2014 he worked as a power transformer design engineer at IEM.
+                                        In 2014, he joined the National Center of Energy Control Center (CENACE) to the analysis department. His current research includes modal
+                                        identification, oscillation monitoring and WAMS applications.
+                                </p>
+
+                        </div>
+                </section>
+
+                <section class="profile" style="background-color: rgb(221, 228, 241);">
+                        <img src= "{% static 'media/img/Zarate.svg' %}" height="140" >
+                        <div>
+                                <div style="display: flex; align-items: center; height: 1.5rem;">
+                                        <a href="#" style="padding-right: 1rem;" >
+                                                <img src="{% static 'media/img/LINKEDIN.png' %}" height="20"> 
+                                         </a>
+                                         <h3>José Luis Zárate Gómez </h3>                               
+                                </div>
+                                <p>
+                                        José Luis Zárate Gómez is currently a student of B.S. in Electrical-Electronics Engineering at Universidad Nacional Autónoma de México
+                                        (UNAM) since 2017. He is working in the Department of Electrical Engineering developing his social service with the ROMA project.
+                                        Passionate about innovation and the implementation of renewable energy to the grid, his current interest lies in the battery management 
+                                        systems for power electronics uses.
+                                </p>
+                        </div>
+                </section>
+
+                <section class="profile">
+                        <img src= "{% static 'media/img/Zelaya.svg' %}" height="140" >
+                        <div>
+                                <div style="display: flex; align-items: center; height: 1.5rem;">
+                                        <a href="https://www.linkedin.com/in/franciscozelaya" style="padding-right: 1rem;" target="_blank">
+                                                <img src="{% static 'media/img/LINKEDIN.png' %}" height="20"> 
+                                         </a>
+                                         <h3>Francisco Zelaya </h3>                               
+                                </div>
+                                <p>
+                                        Francisco Zelaya received his B.S. degree in Electrical Engineering from Universidad Centroamericana José Simeón Cañas, 
+                                        El Salvador, and his M.Eng. in Power Systems from Universidad Nacional Autónoma de México (UNAM), Mexico, in 2014 and 2019, 
+                                        respectively. He has worked for the national system operator of El Salvador, Unidad de Transacciones (UT), and the regional
+                                         system operator of Central America, Ente Operador Regional (EOR). He is currently pursuing his Ph.D. degree in Electrical 
+                                         Engineering, from the University of Tennessee, Knoxville, USA. His research areas include power system dynamics, stability,
+                                          and control, low inertia power systems, and renewable energy.
+                                </p>
+                        </div>
+                </section>
+
+
+
+
+                </div>
+                
+
+
+
+
+        </div>
+
+
+        <div class="participants">
+                <h2>Participants</h2>
+
+                <div class="galery">
+                        <img src= "{% static 'media/img/FI.png' %}" alt="FIUNAM"   height="100">                        
+                        <img src= "{% static 'media/img/unam.png' %}" alt="UNAM"  height="100">
+                        <img src= "{% static 'media/img/CENACE.png' %}" alt="CENACE   height="100" width="250">
+                        <img src= "{% static 'media/img/INSTITUTO.png' %}" alt="INSTITUTO"  height="100" >
+                        <img src= "{% static 'media/img/MICHOACANA.png' %}" alt="MICHOACANA"  height="100">
+                        <img src= "{% static 'media/img/UIS.png' %}" alt="UIS" height="80" width="150"> 
+                        <img src= "{% static 'media/img/RENSSELAER.png' %}" alt="RENSSELAER" height="40" width="200">
+                        <img src= "{% static 'media/img/TENNESSEE.png' %}" alt="TENNESSEE"  height="120">
+
+                </div>
+        </div>
+
+
+        <section style="visibility: hidden;">
+                <h2>Contacto</h2>
+                <form class="formulario"> 
+                    <fieldset>
+                        <legend>Dejanos tus datos para contactarte</legend>
+        
+                        <div class="todo-campo">
+        
+                            <div class="campo">
+                                <label>Name</label>
+                                <input class="imput-text" type="text"placeholder= "Name">
+                            </div>
+                            
+                            <div class="campo">
+                                <label>Teléfono</label>
+                                <input class="imput-text" type="number" placeholder="Your phone">
+                            </div>
+                            
+                            <div class="campo">
+                                <label>Mail</label>
+                                <input  class="imput-text" type="email" placeholder="Your mail">
+                            </div>
+                            
+                            <div class="campo">
+                                <label>mensaje</label>
+                                <textarea  class="imput-text mensaje" name="" id="" cols="30" rows="10"></textarea>
+                            </div>
+        
+                        </div>
+                       
+                        <div   class="campo">
+                            <input class="button send"  type="submit" value="send">
+                        </div>
+                        
+                    </fieldset>
+                </form>
+            </section>
+
+       
+</section>
+
+{% endblock %}
+
