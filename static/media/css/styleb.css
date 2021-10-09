@@ -1,0 +1,131 @@
+:root {
+    --blanco: #ffffff;
+    --negro: #212121;
+    --primario: #f3b600;
+    --secundario: #0b4275;
+    --gris: #757575;
+    --fuente-principal: 3.8rem;
+    --fuente-secundaria: 2rem;
+}
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+    scroll-snap-type: y mandatory;
+}
+/* Scroll snaps 
+.services,
+.nav-principal,
+.formulario {
+  scroll-snap-align: center;
+  scroll-snap-stop: always ;
+} */
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+    font-size: 16px; /* 1rem = 10px */
+    font-family:'krub';
+}
+
+
+ 
+h1, h2, h3 {
+    text-align: center;
+}
+.title {
+    text-align: center;
+    text-transform: capitalize;
+    font-size: 1.5rem;
+    color: var(--primario);
+    font-weight: 700 ;
+    background-color: rgb(29, 67, 172);
+    text-transform: uppercase;
+    padding-top: .5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;    
+}
+
+.container{
+    max-width: 120rem;
+    margin: 0 auto;
+}
+
+.nav-bg{
+    background-color: var(--secundario);
+} 
+
+.nav-princ{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+@media screen and (max-width: 768px) {
+    .nav-princ{
+        flex-direction: column;
+ 
+    } 
+  }
+
+.nav-princ a{
+    color: var(--primario);
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 1rem;
+    display: block;
+    text-align: center;
+}
+
+.nav-princ a:hover{
+    background-color: var(--primario);
+    color: var(--negro);
+}
+
+
+.boundary {
+    fill: none;
+    stroke: #888;
+    stroke-linejoin: round;
+}
+svg {
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(179, 250, 246, 0.658);
+}
+#tooltip{
+    position: absolute;
+    z-index: 2;
+    background: rgba(0,70,30,1.0);
+    width:130px;
+    height:20px;
+    color:white;
+    font-size: 14px;
+    padding:5px;
+    top:-150px;
+    left:-150px;
+    font-family: "Lucida Grande", sans-serif;
+}
+
+.map-cont {
+    height: 65rem;
+    width: 120rem;
+    margin: auto;
+    -webkit-box-shadow: 0px 5px 15px 0px rgba(112,112,122,0.54);
+    -moz-box-shadow: 0px 5px 15px 0px rgba(112,112,122,0.54);
+    box-shadow: 0px 5px 15px 0px rgba(112,112,122,0.54);
+    background-color: var(--balnco) ;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    padding: 2rem;
+    border-radius: 1rem;
+    margin-top: 2rem;
+    border: none;
+}

@@ -1,0 +1,37 @@
+
+{% extends "basecats.html" %}
+{% block title %}
+Zones Googlemaps
+{% endblock %}
+{% load static %}
+{% block content %}
+
+<div id="parent">
+    <svg class='color-cont' id="colorID" height="3rem" width="73rem">
+            
+    </svg>
+
+    <div class="map-cont" id="map" height="39rem" width="73rem">
+        
+    </div>
+</div>
+<script>
+
+    var map = new google.maps.Map(d3.select("#map").node(), {
+        zoom: 5,
+        center: new google.maps.LatLng(20, -99),
+        
+        });
+
+    mapzone= map.data.loadGeoJson(
+        "{% static 'media/json/map_zones2.geojson'%}"
+        );
+
+    map.data.setStyle({
+        fillColor: 'red',
+        strokeWeight: 0.5, 
+        strokeColor:'black',
+        });
+</script>    
+<script src="{% static 'media/js/zonescript.js'%}" ></script>
+{% endblock %}

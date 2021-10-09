@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+        <meta charset="utf-8">
+        <title>
+        {% block title %}
+        el titulo
+        {% endblock %}
+        </title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">      
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">         
+
+        <link rel="stylesheet" href="{% static 'media/css/normalize.css' %}">
+      <link rel="stylesheet" href="{% static 'media/css/stylec.css' %}"> 
+
+         <!-- import d3.js library-->
+        <script src="https://d3js.org/d3.v6.js"></script>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <!-- Load TopoJson for Map -->
+        <script src="https://d3js.org/topojson.v2.min.js"></script>
+    
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script 
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAV0he82xmrf3f25ippa-78Sg4eOBZxQeo&callback">
+        </script>
+        
+
+</head>
+
+<body>
+    <header class="title conatiner">
+        <h1> wide area monitoring system</h1>
+      </header>
+      <div class="nav-bg">
+        <nav class="nav-princ container">
+            <a href="/cict/app/Home/">Home</a>
+            <a href="/cict/app/signals">PMU RT </a>           
+            <a href="/cict/app/mapmx/">Mex Map</a>
+            <a href="/cict/app/Zonemap/">Mex Zones</a>
+            <a href="/cict/app/clusters/">Clusters</a>
+        </nav>
+    </div>
+    <div class="container">
+    {% block content %}
+    El contenido
+    {% endblock %}
+</div>
+</body>
+</html>
