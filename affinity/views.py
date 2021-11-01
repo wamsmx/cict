@@ -22,23 +22,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Create your views here.
 
 import glob
-def clusters(request, d='20200716_035506'):
+
+def clusters(request, d='signals.csv'):
     #fn=f"data/Gentrip/data_{d}.csv"
-    gd='data/units_gps.csv'
-    gd=os.path.join(BASE_DIR,gd)
+    #gd='data/units_gps.csv'
+    #gd=os.path.join(BASE_DIR,gd)
     tabs=[]
     dist='correlation'
     distances={
         'euclidean': 'Euclidean', 'correlation':'Correlation',
-        'jensenshannon':'Jensen Shannon',
-        'chebyshev':'Chebyshev', 'mahalanobis':'Mahalanobis'
+        'jensenshannon':'Jensen Shannon','braycurtis':'Bray-Curtis',
+        'chebyshev':'Chebyshev', 'cityblock':'Cityblock' 
     }
-    events=['20200716_035506']#,'20200716_160955','20200919_020549',
+    #events=['sample']#,'20200716_160955','20200919_020549',
             #'20200909_133110','20200921_122833','20200912_062305',
             #'20200921_153352','20200908_132512','20200918_134511',
             #'20200909_115746']
-    event=events[0]
-    fn=f"data/data_{event}.csv"
+    #event=events[0]
+    event='FNET smaple'
+    fn=f"data/sample.csv"
     fn=os.path.join(BASE_DIR,fn)
     #if request.method=='GET':
     #for i,event in enumerate(events):
@@ -49,7 +51,7 @@ def clusters(request, d='20200716_035506'):
         except:
             pass
         dist=request.POST['select']
-    fig,table=plotMap(fn,gd)
+    fig,table=plotMap(fn,dist)
     i=0
     tabs.append({'id':event, 'name':event, 'fig':fig.to_html(),
                      'table':table.to_html(index=None),'active': i==0})

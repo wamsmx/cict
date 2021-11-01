@@ -15,10 +15,12 @@
   <label for="{{tab.id}}">
     <span style="font-family: 'Press Start 2P';  font-size: 16px; color:white;">{{tab.name}}</span>
   </label>
-  <div class="tab">  
-    <form action="/cict/app/clusters/" method="POST" enctype="multipart/form-data">{% csrf_token %}
+  <div class="tab"> 
+   
+    <form action="/cict/app/clusters/" method="POST" enctype="multipart/form-data"> 
+      {% csrf_token %} 
       <table>
-      <tr><td colspan=2><input type="file" id="signals" name="filename"></tr>>
+      <tr><td colspan=2><input type="file" id="signals" name="filename"></tr>
       <tr><td><b>Distance Function</b></td><td><select name="select">
         {% for d in distances.items %}
         <option value="{{d.0}}" 
@@ -37,7 +39,6 @@
   </div>
   {% endfor %}
   </div>
-<!--{fig|safe}}-->
 {% endblock %}
 {% block footer %}
 {% endblock %}
