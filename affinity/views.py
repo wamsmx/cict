@@ -32,7 +32,7 @@ def clusters(request, d='signals.csv'):
     distances={
         'euclidean': 'Euclidean', 'correlation':'Correlation',
         'jensenshannon':'Jensen Shannon','braycurtis':'Bray-Curtis',
-        'chebyshev':'Chebyshev', 'cityblock':'Cityblock' 
+        'chebyshev':'Chebyshev', 'cityblock':'Cityblock', 'dcor':'Distance Correlation' 
     }
     #events=['sample']#,'20200716_160955','20200919_020549',
             #'20200909_133110','20200921_122833','20200912_062305',

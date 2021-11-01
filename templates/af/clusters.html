@@ -30,11 +30,11 @@
         >{{d.1}}</option>
         {% endfor %}
       </select></td></tr>
-      <tr><td><input type="submit"></td><td></td></tr>
+      <tr><td><input type="submit"  value="submit"></td><td></td></tr>
     </form>
     <table>
+      <tr><td>{{tab.table|safe}}</td></tr>
       <tr><td>{{tab.fig|safe}}</td></td>
-    <tr><td>{{tab.table|safe}}</td></tr>
     </table>
   </div>
   {% endfor %}

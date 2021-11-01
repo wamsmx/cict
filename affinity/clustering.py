@@ -11,39 +11,13 @@ import plotly.graph_objects as go
 #from affinity import Affinity
 import plotly.graph_objects as go
 import plotly.express as px
+from dcor import distance_correlation as dc
 
-def distcorr(X, Y):
-    """ Compute the distance correlation function
-    >>> a = [1,2,3,4,5]
-    >>> b = np.array([1,2,9,4,4])
-    >>> distcorr(a, b)
-    0.762676242417
-    """
-    X = np.atleast_1d(X)
-    Y = np.atleast_1d(Y)
-    if np.prod(X.shape) == len(X):
-        X = X[:, None]
-    if np.prod(Y.shape) == len(Y):
-        Y = Y[:, None]
-    X = np.atleast_2d(X)
-    Y = np.atleast_2d(Y)
-    n = X.shape[0]
-    if Y.shape[0] != X.shape[0]:
-        raise ValueError('Number of samples must match')
-    a = squareform(pdist(X))
-    b = squareform(pdist(Y))
-    A = a - a.mean(axis=0)[None, :] - a.mean(axis=1)[:, None] + a.mean()
-    B = b - b.mean(axis=0)[None, :] - b.mean(axis=1)[:, None] + b.mean()
-    
-    dcov2_xy = (A * B).sum()/float(n * n)
-    dcov2_xx = (A * A).sum()/float(n * n)
-    dcov2_yy = (B * B).sum()/float(n * n)
-    dcor = np.sqrt(dcov2_xy)/np.sqrt(np.sqrt(dcov2_xx) * np.sqrt(dcov2_yy))
-    return dcor
 
-def dcor(X):
+
+def dcorr(X):
     n=len(X)
-    d=[distcorr(X[i],X[j]) for i in range(n) for j in range(i+1,n)]
+    d=[dc(X[i],X[j]) for i in range(n) for j in range(i+1,n)]
     return np.array(d)
 
 def clusterGenerators(data,id_machines=[],distance='correlation'):
@@ -54,7 +28,7 @@ def clusterGenerators(data,id_machines=[],distance='correlation'):
     if distance!='dcor':
         S=-pdist(data,distance)
     else:
-        S=-dcor(data)
+        S=-(1-dcorr(data))
     pref=np.median(S)
     S=squareform(S)
     #print("##########",S.shape)
@@ -152,9 +126,9 @@ def plotMap(fn,dist):
                           text=df.node, hoverinfo='text', name=f"Area {i+1}", 
                           marker = { 'size': 8}))
         
-        fig.update_layout( mapbox = { 'style': "stamen-terrain", 'zoom':2.6,
+        fig.update_layout( mapbox = { 'style': "stamen-terrain", 'zoom':2.7,
         'center': {'lon': ddf.lon.mean(), 'lat': ddf.lat.mean() }},showlegend = True, 
-        height=550, width=700,)
+        height=600, width=750,)
     #fig = px.scatter_geo(ddf,lat=ddf.lat, lon=ddf.lon,color=ddf.cluster_id,hover_name="node")
     #fig.update_layout(geo=dict(lataxis={'range':(23,55)},lonaxis={'range':(-110,-62)}))
     
