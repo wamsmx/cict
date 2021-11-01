@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 from django.template import loader
 import json
+import pandas as pd
 
 from bokeh.server.server import Server
 from bokeh.application import Application
@@ -23,20 +24,38 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import glob
 def clusters(request, d='20200716_035506'):
     #fn=f"data/Gentrip/data_{d}.csv"
-    events=['20200716_035506','20200716_160955','20200919_020549',
-            '20200909_133110','20200921_122833','20200912_062305',
-            '20200921_153352','20200908_132512','20200918_134511',
-            '20200909_115746']
-    tabs=[]
     gd='data/units_gps.csv'
     gd=os.path.join(BASE_DIR,gd)
-    for i,event in enumerate(events):
-        fn=f"data/data_{event}.csv"
-        fn=os.path.join(BASE_DIR,fn)
-        fig,table=plotMap(fn,gd)
-        tabs.append({'id':event, 'name':event, 'fig':fig.to_html(),
+    tabs=[]
+    dist='correlation'
+    distances={
+        'euclidean': 'Euclidean', 'correlation':'Correlation',
+        'jensenshannon':'Jensen Shannon',
+        'chebyshev':'Chebyshev', 'mahalanobis':'Mahalanobis'
+    }
+    events=['20200716_035506']#,'20200716_160955','20200919_020549',
+            #'20200909_133110','20200921_122833','20200912_062305',
+            #'20200921_153352','20200908_132512','20200918_134511',
+            #'20200909_115746']
+    event=events[0]
+    fn=f"data/data_{event}.csv"
+    fn=os.path.join(BASE_DIR,fn)
+    #if request.method=='GET':
+    #for i,event in enumerate(events):
+    if request.method=='POST':
+        try: 
+            fn=request.FILES['filename']
+            event=fn.name
+        except:
+            pass
+        dist=request.POST['select']
+    fig,table=plotMap(fn,gd)
+    i=0
+    tabs.append({'id':event, 'name':event, 'fig':fig.to_html(),
                      'table':table.to_html(index=None),'active': i==0})
-    return render(request, 'af/clusters.html',{'tabs':tabs})
+        #return HttpResponse(pd.read_csv(fn, sep='').to_html())
+    return render(request, 'af/clusters.html',{'tabs':tabs,'dist':dist,
+                                               'distances':distances})
 
 
 def mapmx(request):

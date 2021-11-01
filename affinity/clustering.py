@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 from sklearn.cluster import AffinityPropagation
 from sklearn.metrics import pairwise_distances
+from sklearn.metrics import adjusted_rand_score as ari
+from sklearn.metrics import silhouette_score as sil
+from sklearn.metrics import mean_squared_error as mse
 from scipy.spatial.distance import pdist
 #from affinity import Affinity
 import plotly.graph_objects as go
@@ -73,6 +76,8 @@ def labels_to_table(labels,fnames):#data,file):
 
 def plotMap(fn,gd):
     fnames=[x.replace('source','') for x in pd.read_csv(fn, sep=',').columns[1:-1]]
+    if type(fn)!=str:
+        fn.seek(0)
     fnet01=pd.read_csv(fn, sep=',', skiprows=[0], header=None)
     gps=pd.read_csv(gd)
     data=fnet01.values[:,1:-4]
