@@ -34,6 +34,8 @@ def clusters(request, d='signals.csv'):
         'jensenshannon':'Jensen Shannon','braycurtis':'Bray-Curtis',
         'chebyshev':'Chebyshev', 'cityblock':'Cityblock', 'dcor':'Distance Correlation' 
     }
+    algorithms={'kmeans':'K-Means','hierarchical':'Hierarchical',
+               'affinity':'Affinity Propagation'}
     #events=['sample']#,'20200716_160955','20200919_020549',
             #'20200909_133110','20200921_122833','20200912_062305',
             #'20200921_153352','20200908_132512','20200918_134511',
@@ -42,6 +44,7 @@ def clusters(request, d='signals.csv'):
     event='FNET smaple'
     fn=f"data/sample.csv"
     fn=os.path.join(BASE_DIR,fn)
+    alg='affinity'
     #if request.method=='GET':
     #for i,event in enumerate(events):
     if request.method=='POST':
@@ -51,12 +54,13 @@ def clusters(request, d='signals.csv'):
         except:
             pass
         dist=request.POST['select']
-    fig,table=plotMap(fn,dist)
+    fig,table,groups=plotMap(fn,dist)
     i=0
-    tabs.append({'id':event, 'name':event, 'fig':fig.to_html(),
+    tabs.append({'id':event, 'name':event, 'fig':fig.to_html(),'curves':groups.to_html(),
                      'table':table.to_html(index=None),'active': i==0})
         #return HttpResponse(pd.read_csv(fn, sep='').to_html())
-    return render(request, 'af/clusters.html',{'tabs':tabs,'dist':dist,
+    return render(request, 'af/clusters.html',{'tabs':tabs,'dist':dist,'alg':alg,
+                                               'algorithms':algorithms,
                                                'distances':distances})
 
 

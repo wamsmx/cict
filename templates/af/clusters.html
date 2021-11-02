@@ -21,6 +21,15 @@
       {% csrf_token %} 
       <table>
       <tr><td colspan=2><input type="file" id="signals" name="filename"></tr>
+<tr><td><b>Algorithms</b></td><td><select name="select">
+        {% for a in algorithms.items %}
+        <option value="{{d.0}}" 
+        {% if alg == a.0 %} 
+          selected
+        {% endif %}
+        >{{a.1}}</option>
+        {% endfor %}
+      </select></td></tr>	
       <tr><td><b>Distance Function</b></td><td><select name="select">
         {% for d in distances.items %}
         <option value="{{d.0}}" 
@@ -29,11 +38,11 @@
         {% endif %}
         >{{d.1}}</option>
         {% endfor %}
-      </select></td></tr>
       <tr><td><input type="submit"  value="submit"></td><td></td></tr>
     </form>
     <table>
       <tr><td>{{tab.table|safe}}</td></tr>
+      <tr><td>{{tab.curves|safe}}</td></tr>
       <tr><td>{{tab.fig|safe}}</td></td>
     </table>
   </div>

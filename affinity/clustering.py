@@ -12,13 +12,47 @@ import plotly.graph_objects as go
 import plotly.graph_objects as go
 import plotly.express as px
 from dcor import distance_correlation as dc
+from plotly.subplots import make_subplots
+from matplotlib.colors import rgb2hex
+from matplotlib import pyplot as plt
 
+#cm=plt.cm.get_map('tab20')
 
 
 def dcorr(X):
     n=len(X)
     d=[dc(X[i],X[j]) for i in range(n) for j in range(i+1,n)]
     return np.array(d)
+
+def groupsPlot(data, table, ddf):
+    n=len(set(ddf.cluster_id))+1
+    rows = n//3
+    re=n%3
+    if re==0:
+        specs=[[{},{},{}]]
+    elif re==1:
+        specs=[[{"colspan":3},None,None]]
+    else:
+        specs=[[{"colspan":2},None,{}]]
+    if rows>1:
+        specs+=[[{},{},{}] for i in range(1,rows)]
+    print("#############ZZZZZZ",specs,rows,n)
+    fig=make_subplots(rows=rows, cols=3, specs=specs)
+    for i in range(rows):
+        for j in range(3):
+            for idx in table.Centroid:
+                    if j==0 and i==0 or specs[i][j]==None:
+                        continue
+                    df=data[ddf.cluster_id==idx].values
+                    print("$$$$$$$",df)
+                    for y in df:
+                        print("XXXXXXX",i,j,specs[i][j])
+                        fig.add_trace(go.Scatter(y=y,mode='lines'),
+                                               #  line_color=rgb2hex(cm(i%20))),
+                                      row=i+1, col=j+1
+                        )
+    return fig
+    
 
 def clusterGenerators(data,id_machines=[],distance='correlation'):
     if not id_machines:
@@ -131,8 +165,8 @@ def plotMap(fn,dist):
         height=600, width=750,)
     #fig = px.scatter_geo(ddf,lat=ddf.lat, lon=ddf.lon,color=ddf.cluster_id,hover_name="node")
     #fig.update_layout(geo=dict(lataxis={'range':(23,55)},lonaxis={'range':(-110,-62)}))
-    
-    return fig,table
+    curves=groupsPlot(data,table,ddf)
+    return fig,table,curves
     
 import glob
 if __name__=="__main__":
