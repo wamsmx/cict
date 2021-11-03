@@ -21,16 +21,22 @@
       {% csrf_token %} 
       <table>
       <tr><td colspan=2><input type="file" id="signals" name="filename"></tr>
-<tr><td><b>Algorithms</b></td><td><select name="select">
+<tr><td><b>Algorithms</b></td><td><select name="algorithm" id="algorithm" onchange="show_hide_params()">
         {% for a in algorithms.items %}
-        <option value="{{d.0}}" 
+        <option value="{{a.0}}" 
         {% if alg == a.0 %} 
           selected
         {% endif %}
         >{{a.1}}</option>
         {% endfor %}
       </select></td></tr>	
-      <tr><td><b>Distance Function</b></td><td><select name="select">
+      <tr id="rdistance" name="rdistance"
+      {% if alg == "affinity" %}
+        style="display: table-row;"
+      {% else %}
+           style="display: none;"
+      {% endif %}
+      ><td><b>Distance Function</b></td><td><select id="distance" name="distance">
         {% for d in distances.items %}
         <option value="{{d.0}}" 
         {% if dist == d.0 %} 
@@ -38,11 +44,39 @@
         {% endif %}
         >{{d.1}}</option>
         {% endfor %}
-      <tr><td><input type="submit"  value="submit"></td><td></td></tr>
+        <tr id="rnclusters" name="rnclusters" 
+        {% if alg == "kmeans" %}
+        style="display: table-row;"
+        {% else %}
+           style="display: none;"
+        {% endif %}>
+        <td><b>Number of clusters</b></td><td><select id="nclusters" name="nclusters">
+          {% for n in nclusters.items %}
+          <option value="{{n.0}}" 
+          {% if nc == n.0 %} 
+            selected
+          {% endif %}
+          >{{n.1}}</option>
+          {% endfor %}
+        <tr id="rlinkage" name="rlinkage" 
+        {% if alg == "hierarchical" %}
+        style="display: table-row;"
+        {% else %}
+           style="display: none;"
+        {% endif %}>
+        <td><b>Linkage</b></td><td><select id="linkage" name="linkage">
+          {% for l in linkages.items %}
+          <option value="{{l.0}}" 
+          {% if lk == l.0 %} 
+            selected
+          {% endif %}
+          >{{l.1}}</option>
+          {% endfor %}
+        <tr><td><input type="submit"  value="submit"></td><td></td></tr>
     </form>
-    <table>
-      <tr><td>{{tab.table|safe}}</td></tr>
-      <tr><td>{{tab.curves|safe}}</td></tr>
+    <table width="80%">
+      <tr colspan=2><td>{{tab.table|safe}}</td></tr>
+      <tr><td>{{tab.curves|safe}}</td></tr><tr>
       <tr><td>{{tab.fig|safe}}</td></td>
     </table>
   </div>

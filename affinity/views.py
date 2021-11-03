@@ -36,6 +36,9 @@ def clusters(request, d='signals.csv'):
     }
     algorithms={'kmeans':'K-Means','hierarchical':'Hierarchical',
                'affinity':'Affinity Propagation'}
+    linkages={'centroid':'Centroid','single':'Single','complete':'Complete','average':'Average',
+              'weighted':'Weighted','median':'Median','ward':'Ward'}
+    n_clusters={str(i):i for i in range(2,21)}
     #events=['sample']#,'20200716_160955','20200919_020549',
             #'20200909_133110','20200921_122833','20200912_062305',
             #'20200921_153352','20200908_132512','20200918_134511',
@@ -44,24 +47,29 @@ def clusters(request, d='signals.csv'):
     event='FNET smaple'
     fn=f"data/sample.csv"
     fn=os.path.join(BASE_DIR,fn)
-    alg='affinity'
+    alg='hierarchical'
     #if request.method=='GET':
     #for i,event in enumerate(events):
+    nc,lk=2,'centroid'
     if request.method=='POST':
         try: 
             fn=request.FILES['filename']
             event=fn.name
         except:
             pass
-        dist=request.POST['select']
-    fig,table,groups=plotMap(fn,dist)
+        print(request.POST)
+        dist=request.POST.getlist('distance')[0]
+        alg=request.POST.getlist('algorithm')[0]
+        nc=int(request.POST.getlist('nclusters')[0])
+        lk=request.POST.getlist('linkage')[0]
+    fig,table,groups=plotMap(fn,alg=alg,dist=dist,n_clusters=nc,link=lk)
     i=0
     tabs.append({'id':event, 'name':event, 'fig':fig.to_html(),'curves':groups.to_html(),
                      'table':table.to_html(index=None),'active': i==0})
         #return HttpResponse(pd.read_csv(fn, sep='').to_html())
-    return render(request, 'af/clusters.html',{'tabs':tabs,'dist':dist,'alg':alg,
-                                               'algorithms':algorithms,
-                                               'distances':distances})
+    return render(request, 'af/clusters.html',{'tabs':tabs,'dist':dist,'alg':alg,'lk':lk,'nc':nc,
+                                               'algorithms':algorithms,'nclusters':n_clusters,
+                                               'distances':distances,'linkages':linkages})
 
 
 def mapmx(request):
