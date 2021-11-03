@@ -44,7 +44,7 @@ def clusters(request, d='signals.csv'):
             #'20200921_153352','20200908_132512','20200918_134511',
             #'20200909_115746']
     #event=events[0]
-    event='FNET smaple'
+    event='FNET sample'
     fn=f"data/sample.csv"
     fn=os.path.join(BASE_DIR,fn)
     alg='hierarchical'
