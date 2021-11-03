@@ -15,7 +15,5 @@ urlpatterns = [
     path('Home/', Home, name='Home'), 
     path('Zonemap/', Zonemap, name='Zonemap'),
     path('signals/', signals),
-
-
 ]
 
