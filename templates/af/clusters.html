@@ -31,7 +31,7 @@
         {% endfor %}
       </select></td></tr>	
       <tr id="rdistance" name="rdistance"
-      {% if alg == "affinity" %}
+      {% if alg == "affinity"  or alg == "vat" %}
         style="display: table-row;"
       {% else %}
            style="display: none;"
@@ -76,8 +76,13 @@
     </form>
     <table width="80%">
       <tr colspan=2><td>{{tab.table|safe}}</td></tr>
+      {% if alg == "vat" %}
+      <tr colspan=2><td>{{opt.to_html|safe}}</td></tr>
+      {% endif %}
       <tr><td>{{tab.curves|safe}}</td></tr><tr>
+      {% if mapa %}
       <tr><td>{{tab.fig|safe}}</td></td>
+      {% endif %}
     </table>
   </div>
   {% endfor %}
