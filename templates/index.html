@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
 {% load static %}
-<div style="text-align: center; margin-left: 2rem; margin-right: 3rem;">
+<div style="text-align: center; margin-left: 0rem; margin-right: 0rem; height: 90%; width: 100%; background-color: blanchedalmond;">
   <!--SVG for Map Background-->
   <svg class="map-cont" id="map_bg" ></svg>
   <defs>
@@ -127,8 +127,6 @@ function update_data() {
 
 data=update_data()
 
-
-    
      // INITIALIZING VARIABLES
     // The svg canvas on which the topojson map is generated.
     const map_background_svg = d3.select("#map_bg");
@@ -138,11 +136,15 @@ data=update_data()
     // Width and height of the map window, adjusted by screen size.
     var width;
     var height;
+    var cx_ph   
+    var cy_ph
 
     const requestData = async function () {
 
       width = map_background_svg.node().getBoundingClientRect().width;
       height = map_background_svg.node().getBoundingClientRect().height;
+
+      console.log('screen size', width, height)
 
 
        // MX Map
@@ -156,7 +158,7 @@ data=update_data()
       var areasMesh = topojson.mesh(mapZone, mapZone.objects.collection);
       //var zoom = d3.zoom().on("zoom", zoomed);
       
-      var projection = d3.geoMercator().scale(1400).center([-114, 23.0]).translate([width / 4, height / 2]);
+      var projection = d3.geoMercator().scale(width).center([-114, 23.0]).translate([width / 4, height / 2]);
       var path = d3.geoPath().projection(projection);
 
         let map_outline = map.selectAll("path.area_outline")
@@ -169,19 +171,12 @@ data=update_data()
         .attr("stroke", "#5C7457")
         .attr("stroke-width", "1.5px")
         .style("stroke-linejoin", "round")
-        .on('click', function(d, i) {
-          console.log("You clicked", d), i;
-        })
         .attr('transform', 'translate(0,0)');
 
     
-        
-      
-            
-           
 
-      let window_info_width = 320;
-      let window_info_height = 230;
+      let window_info_width = width*0.3;
+      let window_info_height = width*0.20;
 
       // now add the tooltip
       let window_info = map_background_svg.append("g")
@@ -190,8 +185,8 @@ data=update_data()
         .attr("visibility", "visible")
         .style("z-index", 99);
 
-        var x_w =820
-        var y_w=40
+        var x_w = width*0.64
+        var y_w= 40
 
         window_info.append("rect")
         .attr("fill", "rgba(222,239,243,0.6)")
@@ -206,27 +201,20 @@ data=update_data()
 
 
       window_info.append("text")
-        .attr("font-size", "20px")
+        .attr("font-size", (height * 0.0035) + "rem")
         .attr('fill', '#14213D')
         .attr('font-weight', 'bold')
         .text("Positive Frequency Phasor")
-        .attr("x", x_w+20)
-        .attr("y", y_w+30);
+        .attr("x", x_w + window_info_width*0.5)
+        .style("text-anchor","middle") 
+        .attr("y", y_w+35);
 
-        window_info.append("rect")
-        .attr("fill", "rgba(255,255,255,0.4)")
-        .attr('visibility', 'hidden') 
-        .attr("x", x_w+15)
-        .attr("y", y_w+60)
-        .attr("rx", 0)
-        .attr("ry", 0)
-        .attr("width", window_info_width*0.9)
-        .attr("height", window_info_height*0.6);
 
-        var cx_ph=x_w+15+window_info_width*0.30       
-        var cy_ph=y_w+60+window_info_height*0.3
-        var r_ph=60
-        console.log(cx_ph, cy_ph)
+        
+
+        cx_ph= x_w +window_info_width*0.27       
+        cy_ph=y_w + window_info_height*0.55
+        var r_ph= window_info_width*0.18
 
         window_info.append("circle")
           .attr('cx',cx_ph)
@@ -238,39 +226,39 @@ data=update_data()
 
         window_info.append("text")
         .attr("fill", "#EC3115")
-        .attr("font-size", "10px")
+        .attr("font-size", ( r_ph * 0.017) + "rem")
         .attr('fill', '#14213D')
         .attr('font-weight', '400')
         .text("0°")
-        .attr("x",cx_ph+r_ph+5)
+        .attr("x",cx_ph+r_ph*1.05)
         .attr("y", cy_ph);
         
         window_info.append("text")
         .attr("fill", "#EC3115")
-        .attr("font-size", "10px")
+        .attr("font-size", ( r_ph * 0.017) + "rem")
         .attr('fill', '#14213D')
         .attr('font-weight', '400')
         .text("180°")
-        .attr("x",cx_ph-r_ph-23)
+        .attr("x",cx_ph-r_ph*1.40)
         .attr("y", cy_ph);
 
         window_info.append("text")
         .attr("fill", "#EC3115")
-        .attr("font-size", "10px")
+        .attr("font-size", ( r_ph * 0.017) + "rem")
         .attr('fill', '#14213D')
         .attr('font-weight', '400')
         .text("90°")
-        .attr("x",cx_ph-10)
-        .attr("y", cy_ph-r_ph-5);
+        .attr("x",cx_ph*0.99)
+        .attr("y", cy_ph-r_ph*1.1);
 
         window_info.append("text")
         .attr("fill", "#EC3115")
-        .attr("font-size", "10px")
+        .attr("font-size", ( r_ph * 0.017) + "rem")
         .attr('fill', '#14213D')
         .attr('font-weight', '400')
         .text("270°")
-        .attr("x",cx_ph-10)
-        .attr("y", cy_ph+r_ph+14);
+        .attr("x",cx_ph*0.99)
+        .attr("y", cy_ph+r_ph*1.2);
 
       data_line=[{'fill':'#4D8B31'}, {'fill':'#3D5A6C'},{'fill':'#FFC800'},{'fill':'#FF8427'},{'fill':'#A393BF'}, {'fill':'red'},
                  {'fill':'#950952'}, {'fill':'#F08CAE'},{'fill':'#51bbfe'}]
@@ -283,13 +271,14 @@ data=update_data()
         .enter().append('line')      
         .attr('x1',cx_ph)
         .attr('y1',cy_ph)
-        .attr('x2',cx_ph+r_ph-8)
+        .attr('x2',cx_ph+r_ph*0.85)
         .attr('y2',cy_ph) 
-        .attr('stroke-width', "3px")  
+        .attr('stroke-width',( r_ph * 0.005) + "rem") 
         .attr("marker-end",  function (d, i) {return `url(#triangle${i})`})
         .attr('stroke', function (d) {return d.fill})
         .attr('fill', function (d) {return d.fill})
-        .attr("transform", "rotate(-45 931 169)") ;
+        .attr("transform", `rotate(-45 ${cx_ph} ${cy_ph})`) ;
+
 
 
        //arrow `Hello ${name}!`
@@ -311,7 +300,7 @@ data=update_data()
       window_info.append("circle")
       .attr('cx',cx_ph)
       .attr('cy', cy_ph )
-      .attr('r',3)
+      .attr('r',r_ph*0.06)
       .attr("fill", "#14213D")
       .attr('stroke-width', "3px")
       .attr('stroke', "#14213D")
@@ -322,289 +311,96 @@ data=update_data()
         .data(data_line)
         .enter().append("circle")
         .attr("fill", function (d) {return d.fill})
-        .attr("cx", x_w+210)
-        .attr("cy", function (d,i) {return y_w+71+17*i})
-        .attr("r", 5);
+        .attr("cx", x_w + window_info_width*0.6 )
+        .attr("cy", function (d,i) {return y_w*2.9 + window_info_height*0.07*i}) 
+        .attr("r", r_ph*0.07);
 
       static_text.selectAll('text')
         .attr("d", path)
         .data(data_t)
         .enter().append("text")
-        .attr("font-size", "10px")
+        .attr("font-size",(r_ph * 0.017) + "rem")
         .attr('fill', '#14213D')
         .attr('font-weight', '400')
         .text(function (d) {return d})
-        .attr("x", x_w+230)
+        .attr("x", x_w + window_info_width*0.66 )
         .style('text-transform', 'capitalize')
-        .attr("y", function (d,i) {return y_w+75+17*i});
+        .attr("y", function (d,i) {return y_w*3 + window_info_height*0.07*i}) 
         
 
             
-          window_info.on("click", function () { 
+         /* map.on("click", function () { 
               var pos=d3.mouse(this)
-              console.log(pos)
-             } )
+              console.log('X,Y',pos)
+              console.log('LAT,LOT', projection.invert([pos[0], pos[1]]))
+             } ) */
+
+           
 
           // CREATE LINE 1    
 
-        let LineCHTMAL = grid.append("line")
-          .attr('x1',936 - 1)
-          .attr('y1', 436 )
-          .attr('x2', 672+3)
-          .attr('y2', 418)
-          .attr('z-index', 1)
+        const data_l = [{'class' :'cdjuares-cdmx','X0':-106.44,'Y0':31.74,'X1':-101.98,'Y1':25.239},
+                        {'class' :'cdjuares-cdmx','X0':-101.98,'Y0':25.239,'X1':-99.2,'Y1':19.2},
+                        {'class' :'slvd-chiapas','X0':-89.2,'Y0':13.7,'X1':-93.17,'Y1':16.74},
+                        {'class' :'chiapas-cdmx','X0':-93.17,'Y0':16.74,'X1':-99.2,'Y1':19.2},
+                        {'class' :'chetmal-cdmx','X0':-88.3,'Y0':18.5,'X1':-99.2,'Y1':19.2},
+                        {'class' :'morelia-cdmx','X0':-101.2,'Y0':19.7,'X1':-99.2,'Y1':19.2},
+                        {'class' :'gdlr-cdmx','X0':-103.4,'Y0':20.7,'X1':-103.06,'Y1':18.298},
+                        {'class' :'gdlr-cdmx','X0':-103.06,'Y0':18.298,'X1':-99.2,'Y1':19.2},
+                        {'class' :'mztln-cdmx','X0':-106.4,'Y0':23.3,'X1':-101.896,'Y1':21.93},
+                        {'class' :'mztln-cdmx','X0':-101.896,'Y0':21.93,'X1':-99.2,'Y1':19.2},
+                        {'class' :'mty-cdmx','X0':-100.2,'Y0':25.7,'X1':-99.2,'Y1':19.2},
+                        ]
+
+          const data_p = [{'class' :'cdjuares-cdmx','cx':-101.98,'cy':25.239},
+                          {'class' :'slvd-chiapas','cx':-91.185,'cy':15.22},
+                          {'class' :'chiapas-cdmx','cx':-96.185,'cy':17.97},
+                          {'class' :'chetmal-cdmx','cx':-93.75,'cy':18.85},
+                          {'class' :'morelia-cdmx','cx':-100.2,'cy':19.45},
+                          {'class' :'gdlr-cdmx','cx':-103.06,'cy':18.298},
+                          {'class' :'mztln-cdmx','cx':-101.896,'cy':21.93},
+                          {'class' :'mty-cdmx','cx':-99.7,'cy':22.45},
+                          ]
+
+          grid.selectAll('line')
+          .attr("d", path)
+          .data(data_l)
+          .attr("visibility", "visible")
+          .enter().append('line')      
+          .attr('x1',function (d) {return projection([d.X0, d.Y0])[0];})
+          .attr('y1',function (d) {return projection([d.X0, d.Y0])[1];})
+          .attr('x2',function (d) {return projection([d.X1, d.Y1])[0];})
+          .attr('y2',function (d) {return projection([d.X1, d.Y1])[1];})  
           .attr('stroke-width', "3px")
           .attr('stroke', "grey")
+          .attr('class', function (d) {return d.class});
 
-         grid.append("circle")
-          .attr("cx", 802)
-          .attr("cy", 426)
-          .attr("r", 13)
-          .attr("id", "circle1")
+          grid.selectAll("circle")
+          .attr("d", path)
+          .data(data_p)  
+          .enter().append('circle') 
+          .attr("r",height*0.02)
+          .attr('cx', function (d) {return projection([d.cx, d.cy])[0];})
+          .attr('cy', function (d) {return projection([d.cx, d.cy])[1];})
+          .attr('id',function (d) {return d.ID})
+          .attr('class', function (d) {return d.class})
           .attr("fill", "#DEDEDE")
+          .attr("stroke", "white")
+          .attr('stroke-width', height*0.0005)   
 
-        ang1 = grid.append("text")
-          .attr("x", (792))
-          .attr("y", (425 + 3))
-          .attr("font-size", "9px")
-          .attr("id", "angle1")
-          .attr('class', 'Tangle')
-          .attr("font-family", "Century Gothic")
+          grid.selectAll("text")
+          .attr("d", path)
+          .data(data_p)  
+          .enter().append("text")        
+          .attr('x', function (d) {return projection([d.cx, d.cy])[0];})
+          .attr('y', function (d) {return projection([d.cx, d.cy])[1]+height * 0.0039;})
+          .style("text-anchor","middle")       
+          .attr("font-size", (height * 0.0014) + "rem")  
+          .text("-°")
           .attr("font-weight", "bold")
-          .text('81' + "°");
+          .attr('class', function (d) {return d.class});  
+       
 
-
-           // CREATE LINE 2
-
-           let LineMTREY = grid.append("line")
-          .attr('x1',647 )
-          .attr('y1', 245+6)
-          .attr('x2', 672)
-          .attr('y2', 418-3)
-          .attr('z-index', -1)
-          .attr('stroke-width', "3px")
-          .attr('stroke', "grey")
-
-         grid.append("circle")
-          .attr("cx", 658)
-          .attr("cy", 320)
-          .attr("r", 13)
-          .attr("id", "circle2")
-          .attr("fill", "#DEDEDE")
-
-        ang2 = grid.append("text")
-          .attr("x", (658 - 8))
-          .attr("y", (320 + 3))
-          .attr("font-size", "9px")
-          .attr("id", "anlge2")
-          .attr('class', 'Tangle')
-          .attr("font-family", "Century Gothic")
-          .attr("font-weight", "bold")
-          .text('24' + "°");
-
-          
-           // CREATE LINE 2
-
-        let LineMRLIA = grid.append("line")
-          .attr('x1',622 + 3.9)
-          .attr('y1', 404+2)
-          .attr('x2', 672-3.5)
-          .attr('y2', 418)
-          .attr('z-index', -1)
-          .attr('stroke-width', "3px")
-          .attr('stroke', "grey")
-
-         grid.append("circle")
-          .attr("cx", 648)
-          .attr("cy", 413 -3)
-          .attr("r", 13)
-          .attr("id", "circle3")
-          .attr("fill", "#DEDEDE")
-
-        ang3 = grid.append("text")
-          .attr("x", (648 - 8))
-          .attr("y", (413))
-          .attr("font-size", "9px")
-          .attr("id", "anlge3")
-          .attr('class', 'Tangle')
-          .attr("font-family", "Century Gothic")
-          .attr("font-weight", "bold")
-          .text('31' + "°");
-
-          //LINE 4
-
-        let LineGDJARA = grid.append("line")
-          .attr('x1', 568+3)
-          .attr('y1', 382+3)
-          .attr('x2',615)
-          .attr('y2', 460)
-          .attr('z-index', 0)
-          .attr("id", "line4")
-          .attr('stroke-width', "3px")
-          .attr('stroke', "gray")
-          
-
-        let line5 = grid.append("line")
-          .attr('x1', 615)
-          .attr('y1', 460)
-          .attr('x2', 672-4)
-          .attr('y2', 418+3)
-          .attr("id", "line4")
-          .attr('z-index', 0)
-          .attr('stroke-width', "3px")
-          .attr('stroke', "gray")
-
-        grid.append("circle")
-          .attr("cx", 615)
-          .attr("cy", 460 -3)
-          .attr("r", 13)
-          .attr("id", "circle4")
-          .attr("fill", "#DEDEDE")
-
-        ang3 = grid.append("text")
-          .attr("x", (615 - 8))
-          .attr("y", (460))
-          .attr("font-size", "9px")
-          .attr("id", "anlge4")
-          .attr('class', 'Tangle')
-          .attr("font-family", "Century Gothic")
-          .attr("font-weight", "bold")
-          .text('31' + "°");
-
-          //LINE 5
-
-        let LineMZTLAN = grid.append("line")
-          .attr('x1', 493+6)
-          .attr('y1', 311+1)
-          .attr('x2',625)
-          .attr('y2', 350)
-          .attr('z-index', 0)
-          .attr("id", "line5")
-          .attr('stroke-width', "3px")
-          .attr('stroke', "gray")
-          
-
-        let LineMZTLAN2 = grid.append("line")
-          .attr('x1', 625)
-          .attr('y1', 350)
-          .attr('x2', 672)
-          .attr('y2', 418-2)
-          .attr("id", "line6")
-          .attr('z-index', 0)
-          .attr('stroke-width', "3px")
-          .attr('stroke', "gray")
-
-        grid.append("circle")
-          .attr("cx", 625)
-          .attr("cy", 350)
-          .attr("r", 13)
-          .attr("id", "circle5")
-          .attr("fill", "#DEDEDE")
-
-        ang3 = grid.append("text")
-          .attr("x", (616))
-          .attr("y", (350 + 2))
-          .attr("font-size", "9px")
-          .attr("id", "anlge4")
-          .attr('class', 'Tangle')
-          .attr("font-family", "Century Gothic")
-          .attr("font-weight", "bold")
-          .text('23' + "°");
-
-        //LINE 6
-
-        let LineSLV = grid.append("line")
-          .attr('x1', 912+1)
-          .attr('y1', 557)
-          .attr('x2',823)
-          .attr('y2', 488)
-          .attr('z-index', 0)
-          .attr("id", "line7")
-          .attr('stroke-width', "3px")
-          .attr('stroke', "gray")
-        
-
-        grid.append("circle")
-          .attr("cx", 858)
-          .attr("cy", 515)
-          .attr("r", 13)
-          .attr("id", "circle6")
-          .attr("fill", "#DEDEDE")
-
-        ang3 = grid.append("text")
-          .attr("x", (849))
-          .attr("y", (518))
-          .attr("font-size", "9px")
-          .attr("id", "anlge4")
-          .attr('class', 'Tangle')
-          .attr("font-family", "Century Gothic")
-          .attr("font-weight", "bold")
-          .text('28' + "°");
-
-        // CREATE LINE 2
-
-        let LineCHPAS = grid.append("line")
-          .attr('x1',818 )
-          .attr('y1',481)
-          .attr('x2', 674)
-          .attr('y2', 420)
-          .attr('z-index', -1)
-          .attr('stroke-width', "3px")
-          .attr('stroke', "grey")
-
-         grid.append("circle")
-          .attr("cx", 744)
-          .attr("cy", 448)
-          .attr("r", 13)
-          .attr("id", "circle7")
-          .attr("fill", "#DEDEDE")
-
-        ang2 = grid.append("text")
-          .attr("x", (744 - 8))
-          .attr("y", (448 + 3))
-          .attr("font-size", "9px")
-          .attr("id", "anlge2")
-          .attr('class', 'Tangle')
-          .attr("font-family", "Century Gothic")
-          .attr("font-weight", "bold")
-          .text('24' + "°");
-
-
-        let LineJRZ = grid.append("line")
-        .attr('x1',495 )
-        .attr('y1',83)
-        .attr('x2', 618)
-        .attr('y2', 272)
-        .attr('z-index', -1)
-        .attr('stroke-width', "3px")
-        .attr('stroke', "grey")
-
-        let LineJRZ2 = grid.append("line")
-          .attr('x1', 618)
-          .attr('y1', 272)
-          .attr('x2', 672)
-          .attr('y2', 418-2)
-          .attr('z-index', 0)
-          .attr('stroke-width', "3px")
-          .attr('stroke', "gray")
-
-        
-        grid.append("circle")
-          .attr("cx", 618)
-          .attr("cy", 272)
-          .attr("r", 13)
-          .attr("id", "circle8")
-          .attr("fill", "#DEDEDE")
-
-       grid.append("text")
-          .attr("x", (618 - 8))
-          .attr("y", (272 + 3))
-          .attr("font-size", "9px")
-          .attr("id", "anlge2")
-          .attr('class', 'Tangle')
-          .attr("font-family", "Century Gothic")
-          .attr("font-weight", "bold")
-          .text('24' + "°");
 
       dots= grid.append("g")
         .attr("d", path)
@@ -656,8 +452,8 @@ data=update_data()
         .attr("class", "dots")
         .style("z-index", 1);
 
-        var info_x =10
-        var info_y = 50
+        var info_x = width*0.015
+        var info_y = height*0.15
         width1=width*0.15
         height1=height*0.3
       
@@ -671,28 +467,15 @@ data=update_data()
         .attr("height",height1);
         
         info.append("text")
-        .attr("font-size", "15px")
+        .attr("font-size", (width1 * 0.009) + "rem")
         .attr('fill', '#14213D')
         .attr('font-weight', 'bold')
+        .attr('text-anchor', 'middle')
         .text("Measurements")
-        .attr("x", info_x+30)
-        .attr("y", info_y+30);
+        .attr("x", info_x+width1*0.5)
+        .attr("y", info_y*1.3);
 
-        
-        info.append("rect")
-        .attr("fill", "rgba(255,255,255,0.4)")
-        .attr("x", info_x+10)
-        .attr('visibility', 'hidden') 
-        .attr("y", info_y+40)
-        .attr("rx", 0)
-        .attr("ry", 0)
-        .attr("width", width1*0.9)
-        .attr("height", height1*0.7);
-
-
-
-
-
+       
         data_inf=['location', 'lot', 'lan', 'frequency', 'voltage', 'angle']
 
         info_text=info.append('g')
@@ -703,14 +486,14 @@ data=update_data()
         .data(data_inf)  
         .enter().append('text')
         .attr("fill", "#EC3115")
-        .attr("font-size", "13px")
+        .attr("font-size",(width1 * 0.006) + "rem")
         .attr('fill', '#14213D')
-        .attr('font-weight', '400')
         .attr('font-weight', 'bold')
+        .attr('text-anchor', 'end')
         .text(function (d) {return `${d}:`})
-        .attr("x", info_x+20)
+        .attr("x", info_x + width1*0.45)
         .style('text-transform', 'capitalize')
-        .attr("y", function (d,i) {return info_y+60+23*i});
+        .attr("y", function (d,i) {return info_y*1.6 + height1*0.13*i});
 
         info_point=info.append('g')
         .attr('class', 'data')
@@ -720,14 +503,14 @@ data=update_data()
         .data(data_inf)  
         .enter().append('text')
         .attr("fill", "#EC3115")
-        .attr("font-size", "13px")
+        .attr("font-size",(width1 * 0.006) + "rem")
         .attr('fill', '#14213D')
         .attr('font-weight', '400')
         .text('--')
-        .attr("x", info_x+100)
+        .attr("x",info_x + width1*0.55)
         .attr('class', function (d) {return d})
         .style('text-transform', 'capitalize')
-        .attr("y", function (d,i) {return info_y+60+23*i});
+        .attr("y", function (d,i) {return info_y*1.6 + height1*0.13*i});
        
           }
 
@@ -768,9 +551,11 @@ data=update_data()
                     Math.abs(CHPAS.Value)-Math.abs(CDMX.Value), Math.abs(CHPAS.Value)-Math.abs(CDMX.Value)] */
 
 
-                    old_angle=[CHMAL.Value,MTREY.Value-CDMX.Value, MOR.Value-CDMX.Value, GUAD.Value-CDMX.Value, MXTLAN.Value-CDMX.Value, SLV.Value-CHPAS.Value, 
+                    old_angle=[CHMAL.Value-CDMX.Value,MTREY.Value-CDMX.Value, MOR.Value-CDMX.Value, GUAD.Value-CDMX.Value, MXTLAN.Value-CDMX.Value, SLV.Value-CHPAS.Value, 
                     CHPAS.Value-CDMX.Value, CHPAS.Value-CDMX.Value]
-                    
+
+                    old_angle=[CHPAS.Value-CDMX.Value, SLV.Value-CHPAS.Value, CHPAS.Value-CDMX.Value, CHMAL.Value-CDMX.Value, MOR.Value-CDMX.Value, GUAD.Value-CDMX.Value, MXTLAN.Value-CDMX.Value,  MTREY.Value-CDMX.Value
+                    ]
 
                   
                     angle = []
@@ -799,7 +584,7 @@ data=update_data()
                     arrow=arrow_class.selectAll('line')
                     //console.log(arrow)
                     arrow.data(valuerotate)
-                    arrow.attr("transform", function(d) { return `rotate(${-d} 931 169)`}) 
+                    arrow.attr("transform", function(d) { return `rotate(${-d} ${cx_ph} ${cy_ph})`})   
                    
                     angle=[GUAD.Value, CDMX.Value, MTREY.Value,MOR.Value,MXTLAN.Value,CHMAL.Value, SLV.Value, CHPAS.Value, CHPAS.Value]
                 })
