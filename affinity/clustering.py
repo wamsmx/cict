@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from pandas.core.frame import DataFrame
 from sklearn.cluster import AffinityPropagation
 from sklearn.metrics import pairwise_distances
 from sklearn.metrics import adjusted_rand_score as ari
@@ -17,9 +18,86 @@ from plotly.subplots import make_subplots
 from matplotlib.colors import rgb2hex
 from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
+from skimage.filters import threshold_li
+from matplotlib import colors
 
-cmap=plt.get_cmap('tab20')
+#cmap=plt.get_cmap('tab20')
+cmap=[colors.rgb2hex(c) for c in plt.get_cmap('tab20').colors]
 
+def VAT(data,distance='euclidean'):
+  d=pdist(data, distance)
+  m,n=np.max(d),len(data)
+  D=squareform(d)/m
+  graph={}
+  Di,order=np.zeros(n),np.zeros(n,dtype=int)-1
+  Do=np.zeros((n,n))
+  mi,mj=np.unravel_index(np.argmax(D), D.shape)
+  visited=set([mi])
+  order[0]=mi
+  for k in range(n):
+    z=[(D[k,i],i) for i in range(n) if i!=k]
+    z.sort()
+    graph[k]=z
+  for i in range(1,n):
+    di,r,c=np.inf,-1,-1
+    for j in visited:
+      g=graph[j][:]
+      for dk,k in g:
+        if k in visited:
+          graph[j]=graph[j][1:]
+        elif  di>dk:
+          di=dk
+          r,c=j,k
+    visited.add(c)
+    Di[i]=di
+    order[i]=c
+  for i,p in enumerate(order):
+    for j,q in enumerate(order):
+        Do[i,j]=D[p,q]
+  return Do,order,Di
+
+
+
+
+def VAT_Li(data,dist):
+    D,o,Di=VAT(data,dist)
+    print("XXXXXXX",o)
+    thresh = threshold_li(D)
+    #print("YYYYYY",thresh)
+    n,m=D.shape
+    binary = D > thresh
+    colored = np.zeros((n,m))
+    j,i,l=0,0,1
+    labels=np.zeros(n,dtype=np.int)
+    while(i<n and j<n):
+      if binary[i,j]:
+        colored[j:i,j:i]=l
+        j,l=i,l+1
+      else:
+        labels[i]=l
+        i=i+1
+    colored[j:i+1,j:i+1]=l
+    nk=len(set(labels))+1
+    cscale=[[0.0,'#ffffff']]
+    for i in range(1,nk+1):
+      j,c=cscale[-1]
+      cscale.append([i/nk,c])
+      cscale.append([i/nk,cmap[i%20]])
+    print(cscale)
+    tickvals = [(k+k+2)/2 for k in range(nk)]
+    ticktext = [f'Area {k+1}' for k in range(nk)]
+    print(tickvals,ticktext)
+    cbar = dict(thickness=25, tickvals=tickvals,ticktext=ticktext)
+    fig=make_subplots(rows=1, cols=2,shared_yaxes=True,horizontal_spacing = 0.02,
+                      subplot_titles=("Original", f"Cross-Entropy Thresdhold:{round(thresh,3)}"))
+    l=[f"N{i+1}" for i in o]
+    fig.add_trace(go.Heatmap(z=D,showscale=False,hoverinfo='skip',y=l,x=l),1,1)
+    fig.add_trace(go.Heatmap(z=colored,hoverinfo='skip',x=l,colorscale=cscale,colorbar=cbar),1,2)
+    fig.update_yaxes(autorange="reversed")
+    nlabels=np.zeros(n,dtype=np.int)
+    for i,j in enumerate(o):
+        nlabels[j]=labels[i]
+    return fig,_centers(data,nlabels)
 
 def dcorr(X):
     n=len(X)
@@ -76,6 +154,8 @@ def groupsPlot(data,table,ddf):
     options[0]=dict(label="All",method="update",args=[{"visible":all}])
     for i,cid in enumerate(table.Center.values):
         idx= ddf.cluster_id==cid
+        #idx = np.where(ddf == cid)
+        #print(">>>>>>>",ddf,idx)
         options[i+1]=dict(label=f"Area {i+1}",method="update",args=[{"visible":idx.values}])
         #df=data[ddf.cluster_id==cid].values
         #fn=data.index[ddf.cluster_id==cid].values
@@ -112,16 +192,20 @@ def clusterGenerators(data,id_machines=[],distance='correlation'):
 
 def _centers(data,labels):
     clabels=np.array([l for l in labels])
+    print(clabels)
     for l in set(labels):
-        centroid=np.mean(data[labels==l], axis=0)
-        dists=pairwise_distances(data.values,[centroid])
-        clabels[labels==l]=np.argmin(dists)
+        centroid=np.mean(data.values[labels==l], axis=0)
+        idx=np.where(labels==l)[0]
+        print(idx)
+        dists=pairwise_distances(data.values[idx],[centroid])
+        clabels[labels==l]=idx[np.argmin(dists)]
     return clabels
 
 def kmeans(data, n_clusters):
     kclf   = KMeans(n_clusters=n_clusters, random_state=33).fit(data.values)
     labels = kclf.predict(data.values)
     return kclf,_centers(data,labels)
+
 
 def hierarchical(data, link='average'):
         Z = linkage(data.values, link)
@@ -193,12 +277,16 @@ def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
     #fnames=[x.replace('source','') for x in pd.read_csv(fn, sep=',').columns[1:-1]]
     #if type(fn)!=str:
     #    fn.seek(0)
-    data=pd.read_csv(fn, sep=',',index_col=0)
+    data=pd.read_csv(fn, sep=',')
+    if 'Node_name' in data.columns:
+        data=data.set_index('Node_name')
     #gps=pd.read_csv(gd)
     ddf=[]
+    mapa=False
     if 'lat' in data.columns and 'lon' in data.columns:
        ddf=data[['lat','lon']]
        data=data.iloc[:,0:-2]
+       mapa=True
     if 'time' in data.index:
         data=data[1:]
         if len(ddf): 
@@ -207,6 +295,8 @@ def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
         clf,labels=clusterGenerators(data.values,distance=dist)
     elif alg=='hierarchical':
         clf,labels=hierarchical(data,link)
+    elif alg=='vat':
+        clf,labels=VAT_Li(data,dist)
     else:
         clf,labels=kmeans(data,n_clusters)
     fnames=data.index
@@ -224,14 +314,21 @@ def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
         fig.update_layout( mapbox = { 'style': "stamen-terrain", 'zoom':2.7,
         'center': {'lon': ddf.lon.mean(), 'lat': ddf.lat.mean() }},showlegend = True, 
         height=600, width=750,)
+    else:
+        ddf=DataFrame()
+        ddf['node']=data.index
+        ddf['cluster_id']=[fnames[l] for l in labels]
     #fig = px.scatter_geo(ddf,lat=ddf.lat, lon=ddf.lon,color=ddf.cluster_id,hover_name="node")
     #fig.update_layout(geo=dict(lataxis={'range':(23,55)},lonaxis={'range':(-110,-62)}))
     curves=groupsPlot(data,table,ddf)
-    return fig,table,curves
+    return fig,table,curves,mapa,clf
     
 import glob
 if __name__=="__main__":
-    data=pd.read_csv('data/sample.csv', sep=',',index_col=0)
+    #data=pd.read_csv('data/sample.csv', sep=',',index_col=0)
+    data=pd.read_csv('data/kundur.csv', sep=',')
+    if 'Node_name' in data.columns:
+        data=data.set_index('Node_name')
     if 'lat' in data.columns and 'lon' in data.columns:
        ddf=data[['lat','lon']]
        data=data.iloc[:,0:-2]
@@ -239,22 +336,23 @@ if __name__=="__main__":
         data=data[1:]
         if len(ddf): 
             ddf=ddf[1:]
-    rev,labels=hierarchical(data,'single')
-    print(labels)
-    plt.plot(rev)
-    plt.plot([0,len(rev)-1],[rev[0],rev[-1]])
-    D=np.zeros(len(rev))
-    n=len(rev)-1
-    a=(rev[n]-rev[0])/(n-0)
-    b=n*rev[0]/(n-0)
-    print("eeeee",b,-rev[0],rev[-1])
-    for i in range(len(D)):
-        D[i]=np.abs(-rev[i]+a*i+b)/np.sqrt(a**2+1)
-    print(np.argmax(D))
+    fig,labels=VAT_Li(data,'euclidean')
+    print("XXXXXX",labels)
+    fig.show()
+    #plt.plot(rev)
+    #plt.plot([0,len(rev)-1],[rev[0],rev[-1]])
+    #D=np.zeros(len(rev))
+    #n=len(rev)-1
+    #a=(rev[n]-rev[0])/(n-0)
+    #b=n*rev[0]/(n-0)
+    #print("eeeee",b,-rev[0],rev[-1])
+    #for i in range(len(D)):
+    #    D[i]=np.abs(-rev[i]+a*i+b)/np.sqrt(a**2+1)
+    #print(np.argmax(D))
         
 
 
-    plt.show()
+    #plt.show()
     #fn="data/Gentrip/data_20200716_160955.csv"
     #gd='data/units_gps.csv'
     #for fn in glob.glob("data/Gentrip/*.csv"):
