@@ -28,7 +28,7 @@ def clusters(request, d='signals.csv'):
     #gd='data/units_gps.csv'
     #gd=os.path.join(BASE_DIR,gd)
     tabs=[]
-    dist='correlation'
+    dist='euclidean'
     distances={
         'euclidean': 'Euclidean', 'correlation':'Correlation',
         'jensenshannon':'Jensen Shannon','braycurtis':'Bray-Curtis',
@@ -47,7 +47,7 @@ def clusters(request, d='signals.csv'):
     event='Kundur sample'
     fn=f"data/kundur.csv"
     fn=os.path.join(BASE_DIR,fn)
-    alg='hierarchical'
+    alg='vat'
     #if request.method=='GET':
     #for i,event in enumerate(events):
     nc,lk=2,'centroid'
