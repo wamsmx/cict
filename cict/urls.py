@@ -20,5 +20,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('cict/app/', include('affinity.urls')),
+    path('cict/roma/', include('roma.urls')),
     path('cict/admin/', admin.site.urls),
 ] #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,0 +1,54 @@
+{% extends "basecats.html" %}
+{% block title %}
+{{title}}
+{% endblock %}
+
+
+{% block content %}
+<h1>Examples from Kundur </h1>
+<div class="tabs">
+    <form action="/cict/roma/prony/" method="POST" enctype="multipart/form-data"> 
+      {% csrf_token %} 
+      <table>
+      <tr><td colspan=2><input type="file" id="signals" name="filename"></tr>
+      <tr><td><b>Algorithms</b></td><td>
+	 <!-- Generar lista de algoritmos -->
+	 <select name="algorithm" id="algorithm">
+         {% for a in algorithms.items %}
+            <option value="{{a.0}}" 
+            {% if alg == a.0 %} 
+                    selected
+            {% endif %}
+            >{{a.1}}</option>
+            {% endfor %}
+      </select></td></tr>
+</tr><td><b>Threshold:</b></td><td><input type="text" name="threshold" id="threshold"/><td></tr>
+<tr><td><b>Starting time:</b>:</td><td><input type="text", name="ti" id="ti"></td></tr>
+<tr><td><b>Ending time:</b>:</td><td><input type="text", name="tf" id="tf"></td></tr>
+<tr><td><b>Signal name:</b></td><td><input type="text" name="signal" id="signal"></td></tr>
+<tr><td><input type="submit"  value="submit"></td><td></td></tr>
+
+    </form>
+    <!-- Zona de desplegar -->
+    <table width="80%">
+      <tr>
+	<table>
+	  <tr>
+	    {% for k in parameters.keys %}
+	    <th>{{k}}</th>
+	    {% endfor %}
+	  </tr>
+	   <tr>
+	    {% for v in parameters.values %}
+	      <th>{{v}}</th>
+	    {% endfor %}
+	   </tr>
+	</table>
+      </tr>
+      <tr>{{fig|safe}}</tr>
+    </table>
+  </div>
+  </div>
+{% endblock %}
+{% block footer %}
+{% endblock %}
