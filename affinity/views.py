@@ -64,8 +64,11 @@ def clusters(request, d='signals.csv'):
         lk=request.POST.getlist('linkage')[0]
     fig,table,groups,mapa,opt=plotMap(fn,alg=alg,dist=dist,n_clusters=nc,link=lk)
     i=0
-    tabs.append({'id':event, 'name':event, 'fig':fig.to_html(),'curves':groups.to_html(),
-                     'table':table.to_html(index=None),'active': i==0})
+    with pd.option_context("max_colwidth", 1000):
+        latex_table= table.to_latex(index=False)
+        csv_table= table.to_csv(index=False)
+    tabs.append({'id':event, 'name':event, 'fig':fig.to_html(),'curves':groups,'csv':csv_table,
+                     'table':table.to_html(index=None),'active': i==0, 'latex':latex_table})
         #return HttpResponse(pd.read_csv(fn, sep='').to_html())
     return render(request, 'af/clusters.html',{'tabs':tabs,'dist':dist,'alg':alg,'lk':lk,'nc':nc,
                                                'algorithms':algorithms,'nclusters':n_clusters, 'mapa':mapa,

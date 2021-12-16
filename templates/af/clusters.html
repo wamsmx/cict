@@ -76,12 +76,23 @@
     </form>
     <table width="80%">
       <tr colspan=2><td>{{tab.table|safe}}</td></tr>
+      <tr><td>
+	  <b>Download table as</b>:&nbsp;<a class="button" onclick="download_text('latextable')">latex-code</a>
+	  <a class="button"  onclick="download_text('csvtable','csv')">comma separated csv</a> 
+	  <div style="display: none;" id="latextable" name="csvtable">
+	   {{tab.latex|safe}} 
+	 </div>
+	 <div style="display: none;" id="csvtable" name="csvtable">
+	   {{tab.csv}} 
+	 </div>
+      </td><tr>
       {% if alg == "vat" %}
       <tr colspan=2><td>{{opt.to_html|safe}}</td></tr>
       {% endif %}
-      <tr><td>{{tab.curves|safe}}</td></tr><tr>
+      <tr><td>{{tab.curves.all.to_html|safe}}</td></tr>
+      <tr><td>{{tab.curves.split.to_html|safe}}</td></tr>
       {% if mapa %}
-      <tr><td>{{tab.fig|safe}}</td></td>
+      <tr><td>{{tab.fig|safe}}</td></tr>
       {% endif %}
     </table>
   </div>

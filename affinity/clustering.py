@@ -104,45 +104,50 @@ def dcorr(X):
     d=[dc(X[i],X[j]) for i in range(n) for j in range(i+1,n)]
     return np.array(d)
 
-#def groupsPlot(data, table, ddf):
-#    n=len(set(ddf.cluster_id))+1
-#    rows = n//3
-#    re=n%3
-#    specs=[]
-#    fnames=data.index
-#    if re==1:
-#        specs=[[{"colspan":3},None,None]]
-#        rows=rows+1
-#    elif re==2:
-#        specs=[[{"colspan":2},None,{}]]
-#        rows=rows+1
-#    specs+=[[{},{},{}] for i in range(len(specs),rows)]
-#    fig=make_subplots(rows=rows, cols=3, specs=specs,shared_yaxes=True,
-#                      shared_xaxes=True)
-#    k=0
-#    for i in range(0,rows):
-#        for j in range(0,3):
-#                if k==0:
-#                    print("XXXXXXX",i,j,k)
-#                    k=k+1
-#                    for y in data.values:
-#                        fig.add_trace(go.Scatter(y=y,mode='lines',showlegend = False),
-#                                            #  line_color=rgb2hex(cm(i%20))),
-#                                  row=i+1, col=j+1
-#                        )        
-#                elif specs[i][j]!=None:
-#                    print("XXXXXXX",i,j,k)
-#                    idx=ddf.cluster_id==table.Centroid.values[k-1]
-#                    df=data[idx].values
-#                    fn=fnames[idx]
-#                    k=k+1
-#                    for y,nm in zip(df,fn):
-#                        fig.add_trace(go.Scatter(y=y,mode='lines', legendgroup =f'{k}', name=f'{nm}'),
-#                                  row=i+1, col=j+1
-#                        )
-#                    print("XXXXXXX",i,j)
-#    fig.update_layout(height=800, width=800, title_text="Stacked Subplots")
-#    return fig
+def groupsPlot2(data, table, ddf):
+   n=len(set(ddf.cluster_id))+1
+   rows = n//3
+   re=n%3
+   specs=[]
+   fnames=data.index
+   fnames_dict={k:i for k,i in zip(fnames.values, range(len(data)))}
+   if re==1:
+       specs=[[{"colspan":3},None,None]]
+       rows=rows+1
+   elif re==2:
+       specs=[[{"colspan":2},None,{}]]
+       rows=rows+1
+   specs+=[[{},{},{}] for i in range(len(specs),rows)]
+   subplot_titles=["All"]+[f"Area {ak}" for ak in range(1,n)]
+   fig=make_subplots(rows=rows, cols=3, specs=specs,shared_yaxes=True,#subplot_titles=subplot_titles,
+                     shared_xaxes=True,vertical_spacing=0.05,horizontal_spacing=0.05)
+   k=0
+   for i in range(0,rows):
+       for j in range(0,3):
+               if k==0:
+                   k=k+1
+                   for vid,y in enumerate(data.values):
+                       ci=fnames_dict[ddf.cluster_id.values[vid]]
+                       fig.add_trace(go.Scatter(y=y,mode='lines', showlegend=False, line_color=rgb2hex(cmap[ci%20])),
+                                           
+                                 row=i+1, col=j+1
+                       )
+               elif specs[i][j]!=None:
+                   cid=table['Area id'].values[k-1]
+                   ci=fnames_dict[table.Center.values[k-1]]
+                   idx= ddf.cluster_id==table.Center.values[k-1]
+                   fn=fnames[idx]
+                   df=data[idx.values]
+                   k=k+1
+                   control=True
+                   for y,nm in zip(df.values,fn):
+                       fig.add_trace(go.Scatter(y=y,mode='lines', legendgroup =f'{k}', name=f'Area {cid}',
+                                                line_color=rgb2hex(cmap[ci%20]),showlegend=control),
+                                     row=i+1, col=j+1
+                       )
+                       control=False
+   fig.update_layout(height=800, width=900, title_text="Stacked Subplots")
+   return fig
 
 def groupsPlot(data,table,ddf):
     #fig=make_subplots(rows=2, cols=1,specs=[[{}],[{}]],shared_xaxes=True)
@@ -300,6 +305,7 @@ def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
     else:
         clf,labels=kmeans(data,n_clusters)
     fnames=data.index
+    fnames_dict={k:i for k,i in zip(fnames.values, range(len(data)))}
     fig = go.Figure()
     table=labels_to_table(labels,fnames)
     if len(ddf):
@@ -308,8 +314,8 @@ def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
         for i,idx in enumerate(table.Center):
             df=ddf[ddf.cluster_id==idx]
             fig.add_trace(go.Scattermapbox(mode='markers',lon = df.lon, lat = df.lat,
-                          text=df.node, hoverinfo='text', name=f"Area {i+1}", 
-                          marker = { 'size': 8}))
+                                           text=df.node, hoverinfo='text', name=f"Area {i+1}",
+                          marker = { 'size': 8, 'color':cmap[fnames_dict[idx]%20] }))
         
         fig.update_layout( mapbox = { 'style': "stamen-terrain", 'zoom':2.7,
         'center': {'lon': ddf.lon.mean(), 'lat': ddf.lat.mean() }},showlegend = True, 
@@ -320,7 +326,8 @@ def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
         ddf['cluster_id']=[fnames[l] for l in labels]
     #fig = px.scatter_geo(ddf,lat=ddf.lat, lon=ddf.lon,color=ddf.cluster_id,hover_name="node")
     #fig.update_layout(geo=dict(lataxis={'range':(23,55)},lonaxis={'range':(-110,-62)}))
-    curves=groupsPlot(data,table,ddf)
+    curves={"all":groupsPlot(data,table,ddf)}
+    curves['split']=groupsPlot2(data,table,ddf)
     return fig,table,curves,mapa,clf
     
 import glob
