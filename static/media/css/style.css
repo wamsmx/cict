@@ -81,3 +81,8 @@ table.dataframe th {
     background-color: #215EAF;
     color: white;
 }
+
+a.button {
+    background-color: #1A77FF;
+    border: 1px;
+}

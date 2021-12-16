@@ -14,6 +14,15 @@ function show_hide_params(){
     }
     else{
       d.style.display = "table-row";
-    }
-   
+    }   
+}
+
+function download_text(elementId,ext='text') {
+    var text = document.getElementById(elementId).innerHTML;
+    text=text.replaceAll("&amp;","&");
+    var link = document.createElement('a');
+    alert(text);
+    link.setAttribute('download', 'table.'+ext);
+    link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    link.click(); 
 }
