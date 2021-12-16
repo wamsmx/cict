@@ -7,7 +7,7 @@ from django.urls import path
 from roma.views import * 
 
 urlpatterns = [
-    path('prony/', pronyView, name='roma'),
+    path('', pronyView, name='roma'),
     #re_path(r'clusters/(?P<d>[\w_]+)/$',views.clusters),
     #path('mapmx/', mapmx),
     #path('frequency/', frequency, name='frequency'),

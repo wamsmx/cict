@@ -550,12 +550,13 @@ data=update_data()
                     Math.abs( GUAD.Value)-Math.abs(CDMX.Value), Math.abs(MXTLAN.Value)-Math.abs(CDMX.Value), Math.abs(SLV.Value)-Math.abs(CHPAS.Value), 
                     Math.abs(CHPAS.Value)-Math.abs(CDMX.Value), Math.abs(CHPAS.Value)-Math.abs(CDMX.Value)] */
 
+                    angles = [Math.abs(MOR.Value), Math.abs(CHPAS.Value), Math.abs(GUAD.Value), Math.abs(CDMX.Value), Math.abs(MTREY.Value),
+                     Math.abs(MXTLAN.Value), Math.abs(CHMAL.Value), Math.abs(SLV.Value)]
+                    
+                     old_angle=[Math.abs(CHPAS.Value)-Math.abs(CDMX.Value), Math.abs(SLV.Value)-Math.abs(CHPAS.Value), Math.abs(CHPAS.Value)-Math.abs(CDMX.Value),
+                      Math.abs(CHMAL.Value)-Math.abs(CDMX.Value), Math.abs(MOR.Value)-Math.abs(CDMX.Value), Math.abs(GUAD.Value)-Math.abs(CDMX.Value),
+                      Math.abs(MXTLAN.Value)-Math.abs(CDMX.Value),  Math.abs(MTREY.Value)-Math.abs(CDMX.Value)]
 
-                    old_angle=[CHMAL.Value-CDMX.Value,MTREY.Value-CDMX.Value, MOR.Value-CDMX.Value, GUAD.Value-CDMX.Value, MXTLAN.Value-CDMX.Value, SLV.Value-CHPAS.Value, 
-                    CHPAS.Value-CDMX.Value, CHPAS.Value-CDMX.Value]
-
-                    old_angle=[CHPAS.Value-CDMX.Value, SLV.Value-CHPAS.Value, CHPAS.Value-CDMX.Value, CHMAL.Value-CDMX.Value, MOR.Value-CDMX.Value, GUAD.Value-CDMX.Value, MXTLAN.Value-CDMX.Value,  MTREY.Value-CDMX.Value
-                    ]
 
                   
                     angle = []
@@ -586,7 +587,6 @@ data=update_data()
                     arrow.data(valuerotate)
                     arrow.attr("transform", function(d) { return `rotate(${-d} ${cx_ph} ${cy_ph})`})   
                    
-                    angle=[GUAD.Value, CDMX.Value, MTREY.Value,MOR.Value,MXTLAN.Value,CHMAL.Value, SLV.Value, CHPAS.Value, CHPAS.Value]
                 })
               
                 const url_freq = '/cict/app/frequency/';
