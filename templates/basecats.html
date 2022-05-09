@@ -15,10 +15,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">         
 
         <link rel="stylesheet" href="{% static 'media/css/normalize.css' %}">
-      <link rel="stylesheet" href="{% static 'media/css/stylec.css' %}"> 
-      <script src="{% static 'media/js/custom.js' %}"> 
-
-         <!-- import d3.js library-->
+        <link rel="stylesheet" href="{% static 'media/css/stylec.css' %}"> 
+        <script src="{% static 'media/js/custom.js' %}"> </script>
+        <script src="https://d3js.org/d3.v3.min.js"></script>
         <script src="https://d3js.org/d3.v6.js"></script>
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <!-- Load TopoJson for Map -->
@@ -39,10 +38,11 @@
       <div class="nav-bg">
         <nav class="nav-princ container">
             <a href="/cict/app/Home/">Home</a>
-            <a href="/cict/app/signals">PMU RT </a>           
-            <a href="/cict/app/mapmx/">Mex Map</a>
-            <a href="/cict/app/Zonemap/">Mex Zones</a>
-            <a href="/cict/app/clusters/">Clusters</a>
+            <a href="/cict/roma/">ROMA</a>
+            <a href="/cict/app/clusters/">CAPS-D</a>
+            <a href="/cict/app/signals">PMUs </a>           
+            <a href="/cict/app/mapmx/">Angle Maps</a>
+            <a href="/cict/app/Zonemap/">Frequency Zones</a>
         </nav>
     </div>
     <div class="container">
