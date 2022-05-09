@@ -278,6 +278,9 @@ def labels_to_table(labels,fnames):#data,file):
     #df=df.set_index('Area')
     return df[['Area id','Sources (buses)','Center']] 
 
+colors_html={0:'#1f77b4', 1:'#ff7f0e', 2:'#2ca02c', 3:'#d62728', 4:'#9467bd', 5:'#8c564b', 
+             6:'#e377c2', 7:'#7f7f7f', 8:'#bcbd22', 9:'#17becf',10:'#c65758'}
+
 def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
     #fnames=[x.replace('source','') for x in pd.read_csv(fn, sep=',').columns[1:-1]]
     #if type(fn)!=str:
@@ -316,7 +319,12 @@ def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
             fig.add_trace(go.Scattermapbox(mode='markers',lon = df.lon, lat = df.lat,
                                            text=df.node, hoverinfo='text', name=f"Area {i+1}",
                           marker = { 'size': 8, 'color':cmap[fnames_dict[idx]%20] }))
-        
+            dfc=df[df.node==idx]
+            fig.add_trace(go.Scattermapbox(mode='markers',lon = dfc.lon, lat = dfc.lat,
+                                            text=dfc.node,hoverinfo='text',#name=f"Area {i+1}",
+                                            marker = { 'size': 25, 'color':cmap[fnames_dict[idx]%20],
+                                                       'opacity':0.6},showlegend=False))
+
         fig.update_layout( mapbox = { 'style': "stamen-terrain", 'zoom':2.7,
         'center': {'lon': ddf.lon.mean(), 'lat': ddf.lat.mean() }},showlegend = True, 
         height=600, width=750,)
@@ -328,7 +336,7 @@ def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
     #fig.update_layout(geo=dict(lataxis={'range':(23,55)},lonaxis={'range':(-110,-62)}))
     curves={"all":groupsPlot(data,table,ddf)}
     curves['split']=groupsPlot2(data,table,ddf)
-    return fig,table,curves,mapa,clf
+    return fig,table,curves,mapa,clf,labels
     
 import glob
 if __name__=="__main__":

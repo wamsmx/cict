@@ -39,7 +39,7 @@ def clusters(request, d='signals.csv'):
     linkages={'centroid':'Centroid','single':'Single','complete':'Complete','average':'Average',
               'weighted':'Weighted','median':'Median','ward':'Ward'}
     n_clusters={str(i):i for i in range(2,21)}
-    #events=['sample']#,'20200716_160955','20200919_020549',
+    #events=['sample','20200716_160955','20200919_020549',
             #'20200909_133110','20200921_122833','20200912_062305',
             #'20200921_153352','20200908_132512','20200918_134511',
             #'20200909_115746']
@@ -62,7 +62,7 @@ def clusters(request, d='signals.csv'):
         alg=request.POST.getlist('algorithm')[0]
         nc=int(request.POST.getlist('nclusters')[0])
         lk=request.POST.getlist('linkage')[0]
-    fig,table,groups,mapa,opt=plotMap(fn,alg=alg,dist=dist,n_clusters=nc,link=lk)
+    fig,table,groups,mapa,opt,labels_=plotMap(fn,alg=alg,dist=dist,n_clusters=nc,link=lk)
     i=0
     with pd.option_context("max_colwidth", 1000):
         latex_table= table.to_latex(index=False)
