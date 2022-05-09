@@ -47,7 +47,7 @@ def clusters(request, d='signals.csv'):
     event='Kundur sample'
     fn=f"data/kundur.csv"
     fn=os.path.join(BASE_DIR,fn)
-    alg='vat'
+    alg='tda'
     #if request.method=='GET':
     #for i,event in enumerate(events):
     nc,lk=2,'centroid'
