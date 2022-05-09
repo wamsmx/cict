@@ -341,7 +341,7 @@ def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
                                             marker = { 'size': 25, 'color':cmap[fnames_dict[idx]%20],
                                                        'opacity':0.6},showlegend=False))
 
-        fig.update_layout( mapbox = { 'style': "stamen-terrain", 'zoom':2.7,
+        fig.update_layout( mapbox = { 'style': "open-street-map", 'zoom':2.7,
         'center': {'lon': ddf.lon.mean(), 'lat': ddf.lat.mean() }},showlegend = True, 
         height=600, width=750,)
     else:
