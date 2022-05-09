@@ -34,7 +34,7 @@ def clusters(request, d='signals.csv'):
         'jensenshannon':'Jensen Shannon','braycurtis':'Bray-Curtis',
         'chebyshev':'Chebyshev', 'cityblock':'Cityblock' #, 'dcor':'Distance Correlation' 
     }
-    algorithms={'kmeans':'K-Means','hierarchical':'Hierarchical',
+    algorithms={'tda':'TDA','kmeans':'K-Means','hierarchical':'Hierarchical',
                'affinity':'Affinity Propagation',"vat":"VAT"}
     linkages={'centroid':'Centroid','single':'Single','complete':'Complete','average':'Average',
               'weighted':'Weighted','median':'Median','ward':'Ward'}
@@ -62,7 +62,7 @@ def clusters(request, d='signals.csv'):
         alg=request.POST.getlist('algorithm')[0]
         nc=int(request.POST.getlist('nclusters')[0])
         lk=request.POST.getlist('linkage')[0]
-    fig,table,groups,mapa,opt,labels_=plotMap(fn,alg=alg,dist=dist,n_clusters=nc,link=lk)
+    fig,table,groups,mapa,hmap,labels_,tda=plotMap(fn,alg=alg,dist=dist,n_clusters=nc,link=lk)
     i=0
     with pd.option_context("max_colwidth", 1000):
         latex_table= table.to_latex(index=False)
@@ -72,7 +72,7 @@ def clusters(request, d='signals.csv'):
         #return HttpResponse(pd.read_csv(fn, sep='').to_html())
     return render(request, 'af/clusters.html',{'tabs':tabs,'dist':dist,'alg':alg,'lk':lk,'nc':nc,
                                                'algorithms':algorithms,'nclusters':n_clusters, 'mapa':mapa,
-                                               'distances':distances,'linkages':linkages, 'opt':opt})
+                                               'distances':distances,'linkages':linkages, 'hmap':hmap,'tda':tda})
 
 
 def mapmx(request):

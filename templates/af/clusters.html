@@ -86,9 +86,13 @@
 	   {{tab.csv}} 
 	 </div>
       </td><tr>
-      {% if alg == "vat" %}
-      <tr colspan=2><td>{{opt.to_html|safe}}</td></tr>
+      {% if alg == "vat" or alg == "tda" %}
+        <tr colspan=2><td>{{hmap.to_html|safe}}</td></tr>
+        {% if alg == "tda" %}
+           <tr colspan=2><td>{{tda.to_html|safe}}</td></tr>
+        {% endif %}
       {% endif %}
+     
       <tr><td>{{tab.curves.all.to_html|safe}}</td></tr>
       <tr><td>{{tab.curves.split.to_html|safe}}</td></tr>
       {% if mapa %}

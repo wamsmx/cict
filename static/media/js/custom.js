@@ -7,10 +7,15 @@ function show_hide_params(){
   d.style.display = "none";
   n.style.display = "none";
     if(e.value=='hierarchical'){
-	l.style.display = "table-row";
+	      l.style.display = "table-row";
     }
     else if(e.value=='kmeans'){
           n.style.display = "table-row";
+    }
+    else if(e.value=='tda'){
+      l.style.display = "none";
+      d.style.display = "none";
+      n.style.display = "none";
     }
     else{
       d.style.display = "table-row";

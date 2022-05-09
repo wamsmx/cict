@@ -20,9 +20,18 @@ from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
 from skimage.filters import threshold_li
 from matplotlib import colors
+from .FuncionTDA import FuntionTDA
 
 #cmap=plt.get_cmap('tab20')
 cmap=[colors.rgb2hex(c) for c in plt.get_cmap('tab20').colors]
+
+def TDA(data,dt=.1,t0=0, tf=601,cte=1.7):
+    groups,DataF1, DataF2, TFR_Groups = FuntionTDA(data,dt,t0,tf,cte)
+    nlabels=np.zeros(len(data))
+    groups=groups.transpose()
+    for i in range(len(groups)): 
+            nlabels[[j for j in groups[i].astype(int)-1 if j>-1]]=i+1
+    return None,_centers(data,nlabels),DataF1, DataF2
 
 def VAT(data,distance='euclidean'):
   d=pdist(data, distance)
@@ -97,7 +106,7 @@ def VAT_Li(data,dist):
     nlabels=np.zeros(n,dtype=np.int)
     for i,j in enumerate(o):
         nlabels[j]=labels[i]
-    return fig,_centers(data,nlabels)
+    return None,fig,_centers(data,nlabels)
 
 def dcorr(X):
     n=len(X)
@@ -286,8 +295,12 @@ def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
     #if type(fn)!=str:
     #    fn.seek(0)
     data=pd.read_csv(fn, sep=',')
+    #datao=data.copy()
     if 'Node_name' in data.columns:
         data=data.set_index('Node_name')
+    #if 'time' in data.index:
+    #    datao=datao.drop(index=[0])
+    tda,hmap=None,None
     #gps=pd.read_csv(gd)
     ddf=[]
     mapa=False
@@ -304,7 +317,10 @@ def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
     elif alg=='hierarchical':
         clf,labels=hierarchical(data,link)
     elif alg=='vat':
-        clf,labels=VAT_Li(data,dist)
+        clf,hmap,labels=VAT_Li(data,dist)
+    elif alg=='tda':
+        print(data)
+        clf,labels,tda,hmap=TDA(data)
     else:
         clf,labels=kmeans(data,n_clusters)
     fnames=data.index
@@ -336,7 +352,7 @@ def plotMap(fn,alg='affinity', dist='correlation', n_clusters=2, link='ward'):
     #fig.update_layout(geo=dict(lataxis={'range':(23,55)},lonaxis={'range':(-110,-62)}))
     curves={"all":groupsPlot(data,table,ddf)}
     curves['split']=groupsPlot2(data,table,ddf)
-    return fig,table,curves,mapa,clf,labels
+    return fig,table,curves,mapa,hmap,labels,tda
     
 import glob
 if __name__=="__main__":
