@@ -20,15 +20,23 @@
       <path d="M2,2 L10,6 L2,10 L6,6 L2,2" style="fill: #f00;"></path>
     </marker>
   </defs>
+  <div id="chart"></div>
 </div>
-  
+   
 
-  <script>
-    var current_id=1
+
+  
+<script>
+var current_id=1
 var color_loc= '#14213D'
-var Freq = ['','','','','','','','',''];
-var angle= ['','','','','','','','',''];
-var vtg=['','','','','','','','',''];
+var Freq = ['','','','','','','','','',''];
+var angle= ['','','','','','','','','',''];
+var vtg=['','','','','','','','','',''];
+var angle_rad = [];
+var angle_cor = [];
+var angle_cor_0
+var angle_rad_0
+var angles
 function update_data() {
    return data = [
     {   
@@ -120,12 +128,32 @@ function update_data() {
     'freq':Freq[8],
     'angle':angle[8],
     'fill':'#950952'
+	},
+  {   
+    "index": 9,
+		"lat":22.27,
+		"lon": -97.86,
+		"field": "Hz",	
+    'id': 'tampico',
+    'freq':Freq[9],
+    'angle':angle[9],
+    'fill':'#306DEA'
+	}, 
+  {   
+    "index": 10,
+		"lat":19.13,
+		"lon": -104.4,
+		"field": "Hz",	
+    'id': 'manzanillo',
+    'freq':Freq[9],
+    'angle':angle[9],
+    'fill':'#DAF7A6'
 	}
- 
+
   
 ]}
 
-data=update_data()
+data = update_data()
 
      // INITIALIZING VARIABLES
     // The svg canvas on which the topojson map is generated.
@@ -143,8 +171,6 @@ data=update_data()
 
       width = map_background_svg.node().getBoundingClientRect().width;
       height = map_background_svg.node().getBoundingClientRect().height;
-
-      console.log('screen size', width, height)
 
 
        // MX Map
@@ -261,9 +287,9 @@ data=update_data()
         .attr("y", cy_ph+r_ph*1.2);
 
       data_line=[{'fill':'#4D8B31'}, {'fill':'#3D5A6C'},{'fill':'#FFC800'},{'fill':'#FF8427'},{'fill':'#A393BF'}, {'fill':'red'},
-                 {'fill':'#950952'}, {'fill':'#F08CAE'},{'fill':'#51bbfe'}]
+                 {'fill':'#950952'}, {'fill':'#F08CAE'},{'fill':'#51bbfe'}, {'fill':'#306DEA'}, {'fill': '#DAF7A6'}]
 
-      data_t=['chetumal', 'monterrey', 'morelia', 'guadalajara', 'mazatlán', 'el salvador', 'chiapas', 'cd. juárez', 'CDMX'  ]
+      data_t=['chetumal', 'monterrey', 'morelia', 'guadalajara', 'mazatlán', 'el salvador', 'chiapas', 'cd. juárez', 'CDMX', 'tampico', 'manzanillo' ]
 
        window_info.selectAll('line')
         .attr("d", path)
@@ -312,7 +338,7 @@ data=update_data()
         .enter().append("circle")
         .attr("fill", function (d) {return d.fill})
         .attr("cx", x_w + window_info_width*0.6 )
-        .attr("cy", function (d,i) {return y_w*2.9 + window_info_height*0.07*i}) 
+        .attr("cy", function (d,i) {return y_w*2.6 + window_info_height*0.07*i}) 
         .attr("r", r_ph*0.07);
 
       static_text.selectAll('text')
@@ -325,18 +351,18 @@ data=update_data()
         .text(function (d) {return d})
         .attr("x", x_w + window_info_width*0.66 )
         .style('text-transform', 'capitalize')
-        .attr("y", function (d,i) {return y_w*3 + window_info_height*0.07*i}) 
+        .attr("y", function (d,i) {return y_w*2.7 + window_info_height*0.07*i}) 
         
 
             
-         /* map.on("click", function () { 
+          map.on("click", function () { 
               var pos=d3.mouse(this)
               console.log('X,Y',pos)
               console.log('LAT,LOT', projection.invert([pos[0], pos[1]]))
-             } ) */
+             } )
 
-           
-
+             [-101.35226574660666, 17.59368461940543]
+        
           // CREATE LINE 1    
 
         const data_l = [{'class' :'cdjuares-cdmx','X0':-106.44,'Y0':31.74,'X1':-101.98,'Y1':25.239},
@@ -345,21 +371,25 @@ data=update_data()
                         {'class' :'chiapas-cdmx','X0':-93.17,'Y0':16.74,'X1':-99.2,'Y1':19.2},
                         {'class' :'chetmal-cdmx','X0':-88.3,'Y0':18.5,'X1':-99.2,'Y1':19.2},
                         {'class' :'morelia-cdmx','X0':-101.2,'Y0':19.7,'X1':-99.2,'Y1':19.2},
-                        {'class' :'gdlr-cdmx','X0':-103.4,'Y0':20.7,'X1':-103.06,'Y1':18.298},
-                        {'class' :'gdlr-cdmx','X0':-103.06,'Y0':18.298,'X1':-99.2,'Y1':19.2},
+                        {'class' :'gdlr-cdmx','X0':-103.4,'Y0':20.7,'X1':-101.97,'Y1':18.67},
+                        {'class' :'gdlr-cdmx','X0':-101.97,'Y0':18.67,'X1':-99.2,'Y1':19.2},
                         {'class' :'mztln-cdmx','X0':-106.4,'Y0':23.3,'X1':-101.896,'Y1':21.93},
                         {'class' :'mztln-cdmx','X0':-101.896,'Y0':21.93,'X1':-99.2,'Y1':19.2},
                         {'class' :'mty-cdmx','X0':-100.2,'Y0':25.7,'X1':-99.2,'Y1':19.2},
-                        ]
+						            {'class' :'tmp-cdmx','X0':-99.2,'Y0':19.2,'X1':-97.9,'Y1':22.3},
+                        {'class' :'mnzlo-cdmx','X0':-104.4,'Y0':19.13,'X1':-101.4,'Y1':17.6},
+                        {'class' :'mnzlo-cdmx','X0':-101.4,'Y0':17.6,'X1':-99.2,'Y1':19.2} ]
 
           const data_p = [{'class' :'cdjuares-cdmx','cx':-101.98,'cy':25.239},
                           {'class' :'slvd-chiapas','cx':-91.185,'cy':15.22},
                           {'class' :'chiapas-cdmx','cx':-96.185,'cy':17.97},
                           {'class' :'chetmal-cdmx','cx':-93.75,'cy':18.85},
                           {'class' :'morelia-cdmx','cx':-100.2,'cy':19.45},
-                          {'class' :'gdlr-cdmx','cx':-103.06,'cy':18.298},
+                          {'class' :'gdlr-cdmx','cx':-101.97,'cy':18.9},
                           {'class' :'mztln-cdmx','cx':-101.896,'cy':21.93},
                           {'class' :'mty-cdmx','cx':-99.7,'cy':22.45},
+						              {'class' :'tmp-cdmx','cx':-98.5,'cy':20.77}, 
+                          {'class' :'mnzlo-cdmx','cx':-101.4,'cy':17.8}
                           ]
 
           grid.selectAll('line')
@@ -447,7 +477,7 @@ data=update_data()
         })
 
 
-        info=map_background_svg.append("g")
+        info = map_background_svg.append("g")
         .attr("d", path)
         .attr("class", "dots")
         .style("z-index", 1);
@@ -511,7 +541,19 @@ data=update_data()
         .attr('class', function (d) {return d})
         .style('text-transform', 'capitalize')
         .attr("y", function (d,i) {return info_y*1.6 + height1*0.13*i});
-       
+
+
+
+
+       // var data_chart = [20, 10, 3, 4, 17, 5, 22, 7];
+
+        
+        
+        
+
+        
+
+
           }
 
   
@@ -526,7 +568,7 @@ data=update_data()
                     angleInfo= JSON.parse(datos.data);
                     angle=angleInfo.TimeSeriesDataPoints;
                     
-                    [MOR, CHPAS, GUAD, CDMX, MTREY, MXTLAN, CHMAL, SLV] = angle;
+                    [MOR, CHPAS, GUAD, CDMX, MTREY, MXTLAN, CHMAL, SLV, TMP, CDJRZ, MNZLO] = angle;
                     /*175,11,63,90,85,58,53,68/json"
                     175: Morelia, Michoacan  DPMU
                     11: Morelia, Michoacan  1408 -- Chiapas
@@ -535,60 +577,23 @@ data=update_data()
                     85: Monterrey, Nuevo León 1389
                     58: Mazatlan, Sinaloa 1422
                     53: Chetumal, Quintana Roo 1424
-                    68: El Salvador, El Salvador 1628 
+                    68: El Salvador, El Salvador 1628 */
 
-                      for fq=1:Pt
-                        if deltad(iter,Pt)>pi
-                          deltad(iter,Pt)=deltad(iter,Pt)-2*pi;
-                        end
-                        if deltad(iter,Pt)<-pi
-                          deltad(iter,Pt)=deltad(iter,Pt)+2*pi;
-                        end
-                    end 
-
-                    angle=[CHMAL.Value,Math.abs(MTREY.Value)-Math.abs(CDMX.Value), Math.abs(MOR.Value)-Math.abs(CDMX.Value),
-                    Math.abs( GUAD.Value)-Math.abs(CDMX.Value), Math.abs(MXTLAN.Value)-Math.abs(CDMX.Value), Math.abs(SLV.Value)-Math.abs(CHPAS.Value), 
-                    Math.abs(CHPAS.Value)-Math.abs(CDMX.Value), Math.abs(CHPAS.Value)-Math.abs(CDMX.Value)] */
-
-                    angles = [Math.abs(MOR.Value), Math.abs(CHPAS.Value), Math.abs(GUAD.Value), Math.abs(CDMX.Value), Math.abs(MTREY.Value),
-                     Math.abs(MXTLAN.Value), Math.abs(CHMAL.Value), Math.abs(SLV.Value)]
-                    
-                     old_angle=[Math.abs(CHPAS.Value)-Math.abs(CDMX.Value), Math.abs(SLV.Value)-Math.abs(CHPAS.Value), Math.abs(CHPAS.Value)-Math.abs(CDMX.Value),
-                      Math.abs(CHMAL.Value)-Math.abs(CDMX.Value), Math.abs(MOR.Value)-Math.abs(CDMX.Value), Math.abs(GUAD.Value)-Math.abs(CDMX.Value),
-                      Math.abs(MXTLAN.Value)-Math.abs(CDMX.Value),  Math.abs(MTREY.Value)-Math.abs(CDMX.Value)]
-
-
-                  
-                    angle = []
-
-                    old_angle.forEach(function(value){
-                      if (value > 180){
-                        angle.push(value-360)
-                      }
-                      else if (value <-180){
-                        angle.push(value+360)
-                       
-                      }
-                      else {
-                        angle.push(value)
-                      }
-                    })
-                    
-                   the_text=d3.selectAll(".text1")                
-
-                    angleT=the_text.selectAll("text")
-                    angleT.data(angle);
-                    angleT.text(function(d) { return (`${Math.round(d, -1)}°`); }); 
-
-                    valuerotate =[CHMAL.Value, MTREY.Value, MOR.Value, GUAD.Value, MXTLAN.Value, SLV.Value, CHPAS.Value,CHPAS.Value, CDMX.Value]
-                     arrow_class = d3.select("#window_info")
+                    angle =[(CHMAL.Value).toFixed(2), (MTREY.Value).toFixed(2), (MOR.Value).toFixed(2), (GUAD.Value).toFixed(2), (MXTLAN.Value).toFixed(2), 
+                    (SLV.Value).toFixed(2), (CHPAS.Value).toFixed(2),(CDJRZ.Value).toFixed(2), (CDMX.Value).toFixed(2), (TMP.Value).toFixed(2), (MNZLO.Value).toFixed(2) ]
+					          data = update_data()
+                    arrow_class = d3.select("#window_info")
                     arrow=arrow_class.selectAll('line')
                     //console.log(arrow)
-                    arrow.data(valuerotate)
-                    arrow.attr("transform", function(d) { return `rotate(${-d} ${cx_ph} ${cy_ph})`})   
-                   
+                    arrow.data(angle)
+                    arrow.attr("transform", function(d) { return `rotate(${-d} ${cx_ph} ${cy_ph})`}) 
                 })
-              
+	
+ 
+              }
+			  
+	function getAttr() {
+
                 const url_freq = '/cict/app/frequency/';
 
                 fetch(url_freq)
@@ -596,7 +601,7 @@ data=update_data()
                     .then( datos => {
                         PMU= JSON.parse(datos.data);
                         perPMU=PMU.TimeSeriesDataPoints;
-                        [MOR ,CHPAS, GUAD, CDMX, MTREY, MXTLAN, CHMAL, SLV] = perPMU;
+                         [MOR ,CHPAS, GUAD, CDMX, MTREY, MXTLAN, CHMAL, SLV, TMP, CDJRZ, MNZLO] = perPMU;
                       
                         /*171,7,59,86,81,54,49,64/json"
                         171: Morelia, Michoacan  DPMU
@@ -608,28 +613,93 @@ data=update_data()
                         49: Chetumal, Quintana Roo 1424
                         64: El Salvador, El Salvador 1628 */
                         
-                        Freq =[GUAD.Value, CDMX.Value, MTREY.Value,MOR.Value,MXTLAN.Value,CHMAL.Value, SLV.Value, CHPAS.Value, CHPAS.Value]
+                        Freq =[GUAD.Value, CDMX.Value, MTREY.Value,MOR.Value,MXTLAN.Value,CHMAL.Value, SLV.Value, CHPAS.Value, CDJRZ.Value, TMP.Value, MNZLO.Value]
                         data=update_data()
-                        //console.log(data)
-                        dots.selectAll("circle").data(data)  
-              
+
                     }) 
               
                     d3.select(".location").text(`${data[current_id].id}`)
                     d3.select(".lan").text(`${data[current_id].lat}°`)
                     d3.select(".lot").text(`${data[current_id].lon}°`)
-                    d3.select(".frequency").text(`${(data[current_id].freq).toFixed(3)} Hz`)
-                    d3.select(".angle").text(`${(data[current_id].angle).toFixed(2) }°`)
-                    
-              
-             
-              
+                    d3.select(".frequency").text(`${(data[current_id].freq)} Hz`)  
+					          d3.select(".angle").text(`${(data[current_id].angle)}°`)						
+
               }
+
+
+
+        
+  let socket =new WebSocket('ws://localhost:8000/ws/polData/');
+  socket.onopen =function(e){
+     
+  };
+
+  var chart_x = width*0.015
+  var chart_y = height*0.55
+  var width_01 = width*0.37
+  var height_01 = height*0.37
+
+
+  
+
+
+  socket.onmessage = function(e){
       
-      $(document).ready(function(){
+      var recData=JSON.parse(e.data);
+    
+      //UPDATE RELATIVE ANGLE 
+      the_text=d3.selectAll(".text1")                
+      angleT=the_text.selectAll("text")
+      angleT.data(recData.value);
+      angleT.text(function(d) { return (`${d}°`); }); 
+      
+      // Real-time line chart
+    
+    /*      
+      data_chart.push(recData.value[0]);
+
+      if (data_chart.length > 35) data_chart.splice(0, 1);
+      
+      console.log('data_chart', data_chart, recData.value[0])
+      
+      renderLine(data_chart, svg_chart_line) */
+
+  };
+
+  socket.onclose = function(e){
+      alert('Connection CLosed');
+  };
+      
+    /*  function renderLine(data_chart, svg_chart_line) {
+        var lines = svg_chart_line.selectAll('line').data(data_chart)
+    
+        lines.enter().append('line')
+        .attr("style", "stroke:rgb(256,0,0);stroke-width:2")
+        .attr("x1", (d, i) => chart_x*3 + (i-1) * 15 )
+        .attr("y1", (d, i) => (isNaN(data_chart[i-1]) ? 100 + chart_y*1.3  : 100 - data_chart[i-1]*3 + chart_y*1.3) )
+        .attr("x2", (d, i) => chart_x*3 + i * 15 )
+        .attr("y2", (d) => 100 - d*3 + chart_y*1.3)
+      
+        // update
+        lines.transition().duration(0)
+        .attr("x1", (d, i) => chart_x*3 + (i-1) * 15 )
+        .attr("y1", (d, i) => (isNaN(data_chart[i-1]) ? 100 + chart_y*1.3  : 100 - data_chart[i-1]*3 + chart_y*1.3) )
+        .attr("x2", (d, i) => chart_x*3 + i * 15 )
+        .attr("y2", (d) => 100 - d*3 + chart_y*1.3)
+
+        // exit
+        lines.exit().remove();
+
+      } */
+
+	  
+	  $(document).ready(function(){
+      setInterval(getAttr,1000);
       setInterval(getAngle,1000);
       }); 
-      
+
+     
+    
       
      
      

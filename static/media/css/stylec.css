@@ -55,12 +55,13 @@ font-family: 'Montserrat', sans-serif; */
 }
 .galery{
     display: grid;
-    grid-template-columns: repeat(4, 1fr) ;
-    column-gap: 2rem;
+    grid-template-columns: repeat(4, 2fr) ;
+    column-gap: 3rem;
     justify-content: center;
-    padding: 0.5rem;
+    padding: 1rem;
     align-items: center;
-    
+    grid-gap: 2rem;
+    place-items: center;
 }
 
 .tool-ct  {
@@ -423,3 +424,8 @@ a.button:hover {
     text-decoration: underline;
     font-weight: bold;
 }    
+
+#chart {
+    max-width: 600px;
+    max-height: 400px;
+  }
