@@ -117,7 +117,7 @@ def FuntionTDA(freq, dt,t0,tf,cte):
         txt='Area '+str(i+1)
         fig1.add_trace(go.Scatter(x=[centroid[i]+0.5,centroid[i]+0.5],y=[0.0,0.04], mode='lines',name=txt))
 
-    fig1.update_layout(title='Tau(k) after ranking ', xaxis_title='ranked_τ (k)  ', yaxis_title="Ranked Typicality τ_k (ν_k) ")
+    fig1.update_layout(title='τ_k after ranking ', xaxis_title='ranked_τ (k)  ', yaxis_title="Ranked Typicality τ_k (ν_k) ")
 
 
     #-histogram---------------------------------------
