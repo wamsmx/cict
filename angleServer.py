@@ -7,7 +7,7 @@ import math
 #define WebSocket-Client
 ws = websocket.WebSocket(sslopt={"check_hostname": False})
 #connect
-ws.connect("ws://localhost:8000/ws/polData/")
+ws.connect("ws://localhost:8001/ws/polData/")
 
 #Routine to get the angle and calculate the relatie angle value
 def correct_angle(value):
