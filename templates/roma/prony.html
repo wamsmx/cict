@@ -22,20 +22,20 @@
             >{{a.1}}</option>
             {% endfor %}
       </select></td></tr>
-<tr><td><b>Starting time:</b>:</td><td><input type="text", name="ti" id="ti"></td></tr>
-<tr><td><b>Ending time:</b>:</td><td><input type="text", name="tf" id="tf"></td></tr>
+<tr><td><b>Starting time:</b>:</td><td><input type="text", name="ti" id="ti" value="1"></td></tr>
+<tr><td><b>Ending time:</b>:</td><td><input type="text", name="tf" id="tf" value="5"></td></tr>
       <tr      {% if alg == 0 %}
 	       style="display: table-row;"
 	       {% else %}
 	       style="display: none;"
 	       {% endif %}
-	       id="tr_order"><td><b> Order: </b></td><td><input type="text" name="order" id="order" value="3" /></td></tr>
+	       id="tr_order"><td><b> Order: </b></td><td><input type="text" name="order" id="order" value="10" /></td></tr>
       <tr  {% if alg != 0 %}
 	       style="display: table-row;"
 	       {% else %}
 	       style="display: none;"
 	   {% endif %}
-	   id="tr_threshold"><td><b>Threshold : </b></td><td><input type="text" name="threshold" id="threshold" value = "0.5"/></td></tr>
+	   id="tr_threshold"><td><b>Threshold : </b></td><td><input type="text" name="threshold" id="threshold" value = "0.7"/></td></tr>
 <!--<tr><td><b>Signal name:</b></td><td><input type="text" name="signal" id="signal"></td></tr>-->
 <tr><td><input type="submit"  value="submit"></td><td></td></tr>
 
