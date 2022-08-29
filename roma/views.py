@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .metodos import Prony as prony
+from .ringdown import Prony, ERA, Matrix_Pencil as MP
 import os
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
@@ -7,10 +7,10 @@ import pandas as pd
 import plotly.express as px
 from pathlib import Path
 import numpy as np
+import plotly.graph_objects as go
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 # Create your views here.
-
 
 def pronyView(request):
     #return HttpResponse("Hola Mundo")
@@ -20,41 +20,34 @@ def pronyView(request):
              'texto':"Hola mundo",
              'alg':0,}
     if request.method=='POST':
-        try:
+        #try:
             fn=request.FILES['filename']
             alg=int(request.POST.getlist('algorithm')[0])
+            ts=int(request.POST.get('ti',0))
+            tf=int(request.POST.get('tf'))
             data=pd.read_csv(fn, sep=',')
-            data=data.drop(columns=['lat','lon'])
-            data=data.set_index('Node_name')
-            y,t=data.loc['601'],data.loc['time'].values
-            fig=px.line(y=y,x=t)
-            context['fig']=fig.to_html()
-            dt=t[1]-t[0]
-            N=len(y)
+            if 'lat' in data.columns and  'lon' in data.columns :
+                data=data.drop(columns=['lat','lon'])
             if alg==0:
-                modes,mag,ang,damp,freq,damprat,enrgy,roots=prony(y,N,dt,5)
-            elif alg==1:
-                #Pencil
-                modes,mag,ang,damp,freq,damprat,enrgy,roots=np.zeros(8)
+                hp=int(request.POST.get('order',3))
+                res=Prony(data, ts, tf, hp)
             else:
-                #ERA
-                modes,mag,ang,damp,freq,damprat,enrgy,roots=np.zeros(8)
-            context['alg']=alg    
-            context['parameters']={"Modes":modes,"Amplitude":mag,
-                                 "Phase":ang,"Damping":damp,
-                                 "Frequency":freq,"Damping Ratio":damprat,
-                                 "Energy":enrgy,"Poles":roots}
-        except Exception as e:
-            print(">>>>>>>>>>>>", e)
-            pass
+                hp=float(request.POST.get('threshold',0.5))
+                print(ts,tf,hp)
+                if alg==1:
+                    res=MP(data, ts, tf, hp)
+                else:
+                    res=ERA(data, ts, tf, hp)
+            context['alg']=alg
+            df=data.set_index('Node_name')
+            fig = go.Figure()
+            for idx in data.index[1:]:
+                fig.add_trace(go.Scatter(x=data.loc[data.index[0]][ts:tf], y=data.loc[idx][ts:tf],mode='lines',name=idx))
+            context['fig']=fig.to_html()
+            table=pd.DataFrame(res)
+            context['tab']={'table':table.to_html(index=False),'latex':table.to_latex(index=False),'csv':table.to_csv(index=False)}
+        #except Exception as e:
+        #    print(">>>>>>>>>>>>", e)
+            #pass
     return render(request, 'roma/prony.html',context)
-    #fn=f"data/kundur.csv"
-    #fn=os.path.join(BASE_DIR,fn)
-    #if request.method=='POST':
-    #    try: 
-    #        fn=request.FILES['filename']
-    #        event=fn.name
-    #    except:
-    #        pass
-  
-    #return render(request, 'af/clusters.html',{'tabs':tabs})
+

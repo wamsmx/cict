@@ -13,7 +13,7 @@
       <tr><td colspan=2><input type="file" id="signals" name="filename"></tr>
       <tr><td><b>Algorithms</b></td><td>
 	 <!-- Generar lista de algoritmos -->
-	 <select name="algorithm" id="algorithm">
+	 <select name="algorithm" id="algorithm" onchange="show_hide_params_rd()">
          {% for a in algorithms.items %}
             <option value="{{a.0}}" 
             {% if alg == a.0 %} 
@@ -22,32 +22,42 @@
             >{{a.1}}</option>
             {% endfor %}
       </select></td></tr>
-</tr><td><b>Threshold:</b></td><td><input type="text" name="threshold" id="threshold"/><td></tr>
 <tr><td><b>Starting time:</b>:</td><td><input type="text", name="ti" id="ti"></td></tr>
 <tr><td><b>Ending time:</b>:</td><td><input type="text", name="tf" id="tf"></td></tr>
-<tr><td><b>Signal name:</b></td><td><input type="text" name="signal" id="signal"></td></tr>
+      <tr      {% if alg == 0 %}
+	       style="display: table-row;"
+	       {% else %}
+	       style="display: none;"
+	       {% endif %}
+	       id="tr_order"><td><b> Order: </b></td><td><input type="text" name="order" id="order" value="3" /></td></tr>
+      <tr  {% if alg != 0 %}
+	       style="display: table-row;"
+	       {% else %}
+	       style="display: none;"
+	   {% endif %}
+	   id="tr_threshold"><td><b>Threshold : </b></td><td><input type="text" name="threshold" id="threshold" value = "0.5"/></td></tr>
+<!--<tr><td><b>Signal name:</b></td><td><input type="text" name="signal" id="signal"></td></tr>-->
 <tr><td><input type="submit"  value="submit"></td><td></td></tr>
 
     </form>
     <!-- Zona de desplegar -->
-    <table width="80%">
+</div>
+<table width="800">
+  <tr>{{tab.table|safe}}</tr>
+  {% if tab %}
+        <tr>
+	  <b>Download table as</b>:&nbsp;<a class="button" onclick="download_text('latextable')">latex-code</a>
+	  <a class="button"  onclick="download_text('csvtable','csv')">comma separated csv</a> 
+	  <div style="display: none;" id="latextable" name="csvtable">
+	   {{tab.latex|safe}} 
+	 </div>
+	 <div style="display: none;" id="csvtable" name="csvtable">
+	   {{tab.csv}} 
+	 </div>
       <tr>
-	<table>
-	  <tr>
-	    {% for k in parameters.keys %}
-	    <th>{{k}}</th>
-	    {% endfor %}
-	  </tr>
-	   <tr>
-	    {% for v in parameters.values %}
-	      <th>{{v}}</th>
-	    {% endfor %}
-	   </tr>
-	</table>
-      </tr>
+  {% endif %}
       <tr>{{fig|safe}}</tr>
     </table>
-  </div>
   </div>
 {% endblock %}
 {% block footer %}

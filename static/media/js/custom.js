@@ -31,3 +31,17 @@ function download_text(elementId,ext='text') {
     link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     link.click(); 
 }
+
+function show_hide_params_rd(){
+  var o = document.getElementById("tr_order");
+  var t = document.getElementById("tr_threshold");
+  var e = document.getElementById("algorithm");  
+  o.style.display = "none";
+  t.style.display = "none";  
+  if(e.value == 0 ){
+	      o.style.display = "table-row";
+  }
+  else{
+      t.style.display = "table-row";
+  }   
+}
