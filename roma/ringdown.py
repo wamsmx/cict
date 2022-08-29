@@ -80,7 +80,7 @@ def Prony(data,Ka,ti,tf=np.inf):
 	damp_ratio=100*damp/omega
 	idx=[i for i,v in enumerate(freq) if v>0 and v<10]
 	resultado={
-		'Frecuency':freq[idx],
+		'Frequency':freq[idx],
 		'Damping':damp[idx],
 		'Damp.ratio':damp_ratio[idx],
 	}
@@ -167,7 +167,7 @@ def ERA(data,threshold,ti,tf=np.inf):
     
 	idx=[i for i,v in enumerate(freq) if v>0 and v<10]
 	resultado={
-		'Frecuency':freq[idx],
+		'Frequency':freq[idx],
 		'Damping':damp[idx],
 		'Damp.ratio':damp_ratio[idx],
 	}
@@ -264,7 +264,7 @@ def Matrix_Pencil(data,threshold,ti,tf=np.inf):
 	#}
 	idx=[i for i,v in enumerate(freq) if v>0 and v<10]
 	resultado={
-		'Frecuency':freq[idx],
+		'Frequency':freq[idx],
 		'Damping':damp[idx],
 		'Damp.ratio':damp_ratio[idx],
 	}

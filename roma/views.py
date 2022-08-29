@@ -54,6 +54,7 @@ def pronyView(request):
         fig.add_trace(go.Scatter(x=data.loc[data.index[0]][Ti:Tf], y=data.loc[idx][Ti:Tf],mode='lines',name=idx))
     context['fig']=fig.to_html()
     table=pd.DataFrame(res)
+    table.sort_values(by='Frequency', inplace=True)
     context['tab']={'table':table.to_html(index=False),'latex':table.to_latex(index=False),'csv':table.to_csv(index=False)}
         #except Exception as e:
         #    print(">>>>>>>>>>>>", e)
