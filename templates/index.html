@@ -506,7 +506,7 @@ data = update_data()
         .attr("y", info_y*1.3);
 
        
-        data_inf=['location', 'lot', 'lan', 'frequency', 'voltage', 'angle']
+        data_inf=['location', 'lon', 'lat', 'frequency', 'voltage', 'angle']
 
         info_text=info.append('g')
         
@@ -619,8 +619,8 @@ data = update_data()
                     }) 
               
                     d3.select(".location").text(`${data[current_id].id}`)
-                    d3.select(".lan").text(`${data[current_id].lat}°`)
-                    d3.select(".lot").text(`${data[current_id].lon}°`)
+                    d3.select(".lat").text(`${data[current_id].lat}°`)
+                    d3.select(".lon").text(`${data[current_id].lon}°`)
                     d3.select(".frequency").text(`${(data[current_id].freq)} Hz`)  
 					          d3.select(".angle").text(`${(data[current_id].angle)}°`)						
 
@@ -629,7 +629,7 @@ data = update_data()
 
 
         
-  let socket =new WebSocket('ws://localhost:8000/ws/polData/');
+  let socket =new WebSocket('ws://148.216.38.78/ws/polData/');
   socket.onopen =function(e){
      
   };

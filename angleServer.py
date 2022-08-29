@@ -20,6 +20,7 @@ def correct_angle(value):
         value = value
     value = value*math.pi/180
     return round(value, 6)
+
 names_dict = {'260': 'Tampico', '250':'Ciudad Juárez', '175': 'Morelia', '11': 'Tuxtla', '63': 'Guadalajara', '205': 'Cdmx', '85': 'Monterrey', '58': 'Mazatlan','53': 'Chetumal','68': 'El Salvador'}
 _order = [175, 11, 63, 205, 85, 58, 53, 68, 260, 250]
 
@@ -36,22 +37,6 @@ def get_angle():
     angle = [d['Value'] for d in source]
     angle = list(map(lambda x : correct_angle(x), angle))
     return angle
-
-#This function separates the angle array
-def get_each_angle():
-    angles = get_angle()
-    morelia = angles[0] 
-    tuxtla = angles[1] 
-    guadalajara = angles[3] 
-    cdmx = angles[3]   
-    monterrey = angles[4] 
-    mazatlan = angles[5]  
-    chetumal = angles[6] 
-    salvador = angles[7] 
-    tampico = angles[8]
-    juarez = angles[9]
-    mnzlo = angles[10]
-    return morelia, tuxtla, guadalajara, cdmx, monterrey, mazatlan, chetumal, salvador, tampico, juarez, mnzlo
 
 angle0 = get_angle()
 #Calculate ref angle
@@ -130,10 +115,6 @@ while True:
             _self_norm_angle = 0
         self_norm_angle.append(_self_norm_angle)
 
-    '''dict_rel_angle ={'mor-cdmx': self_norm_angle[0], 'tuxt-cdmx': self_norm_angle[1], 'guad-cdmx': self_norm_angle[2],
-        'cdmx-cdmx': self_norm_angle[3], 'mtrey-cdmx': self_norm_angle[4], 'mztln-cdmx': self_norm_angle[5],
-        'chtmal-cdmx': self_norm_angle[6], 'slvd-tuxt': self_norm_angle[7], 'tmpc-cdmx': self_norm_angle[8],
-        'cdjrz-cdmx': self_norm_angle[9]}'''
     
     self_norm_angle = [self_norm_angle[9], self_norm_angle[7],self_norm_angle[1], self_norm_angle[6], self_norm_angle[0],
                         self_norm_angle[2], self_norm_angle[5], self_norm_angle[4],self_norm_angle[8], self_norm_angle[10]]
