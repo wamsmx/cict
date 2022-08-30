@@ -52,6 +52,7 @@ def pronyView(request):
     fig = go.Figure()
     for idx in data.index[1:]:
         fig.add_trace(go.Scatter(x=data.loc[data.index[0]][Ti:Tf], y=data.loc[idx][Ti:Tf],mode='lines',name=idx))
+    fig.update_layout(xaxis_title='Time (s)')
     context['fig']=fig.to_html()
     table=pd.DataFrame(res)
     table.sort_values(by='Frequency', inplace=True)
