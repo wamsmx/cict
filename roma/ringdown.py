@@ -9,10 +9,19 @@ def sortrows(a):
 		new[i,:]=a[c[0][0],:]
 	return new
 
+def get_bounds(data, ti,tf=np.inf):
+	df=data.set_index('Node_name')
+	Tr=df.loc['t'].values
+	print(np.max(Tr))
+	T=[(i,t) for i,t in enumerate(Tr) if ti<=t and t<=tf]
+	Fs=1 /(Tr[1]-Tr[0])
+	print(ti,tf,T[0],T[-1])
+	return Fs,T   
 
-
-def Prony(data,Ti,Tf,Ka):
-	Fs=60
+def Prony(data,Ka,ti,tf=np.inf):
+	Fs,T=get_bounds(data,ti,tf)
+	Ti,Tfi=T[0]
+	Tf,Tff=T[-1]
 	data=data.to_numpy()
 	print(data)
 	t=data[0,1:]
@@ -32,7 +41,7 @@ def Prony(data,Ti,Tf,Ka):
 	longg=np.arange(Ka+1,Nm+1)
 	longgs=longg.shape[0]
 	cte=0
-
+	print("CCCCCCC",Ka, type(Ka))
 	Zigma=np.zeros([ns*longgs,Ka])
 	sn=np.zeros([ns*longgs,1])
 
@@ -69,26 +78,23 @@ def Prony(data,Ti,Tf,Ka):
 	omega=np.imag(lamdas)
 	freq=omega/(2*np.pi)
 	damp_ratio=100*damp/omega
-
-	parameters1=np.vstack([freq,damp])
-	parameters1=np.vstack([parameters1,damp_ratio])
-
-	freq_pos=np.argwhere((parameters1[0]>0.2) & (parameters1[0]<1.0))
-
-	parameters2=parameters1[:,freq_pos]
-	parameters=sortrows(np.transpose(parameters2))
+	idx=[i for i,v in enumerate(freq) if v>0 and v<10]
 	resultado={
-		'Frecuency':parameters[0][:,0],
-		'Damping':parameters[0][:,1],
-		'Damp.ratio':parameters[0][:,2]
+		'Frequency':freq[idx],
+		'Damping':damp[idx],
+		'Damp.ratio':damp_ratio[idx],
 	}
-	return resultado
+	return resultado, (Ti,Tf)
 
-def ERA(data,T0,T_end,threshold):
-	Fs=60
+def ERA(data,threshold,ti,tf=np.inf):
+	Fs,T=get_bounds(data,ti,tf)
+	T0,Tfi=T[0]
+	T_end,Tff=T[-1]
 	data=data.to_numpy()
 	t=data[0,1:]
 	stna=data[1:,1:]
+	
+	print("XXXXXXXXX",stna.shape)
 	
 	stax=stna
 	Ts=1/Fs
@@ -100,7 +106,7 @@ def ERA(data,T0,T_end,threshold):
 		st1[k,:]=stna[k,:]-np.mean(stna[k,:])
 		pass
 
-	st=np.transpose(st1[:,T0:T_end])
+	st=np.transpose(st1[:,T0:T_end+1])
 	Nm=st.shape
 	tao=Ts
 
@@ -158,24 +164,20 @@ def ERA(data,T0,T_end,threshold):
 	freq=lambdaI/(2*np.pi)
 	damp=-lambdaR
 	damp_ratio=100*damp/lambdaI
-
-	parameters1=np.vstack([freq,damp])
-	parameters1=np.vstack([parameters1,damp_ratio])
-
-	freq_pos=np.argwhere((parameters1[0]>0.2) & (parameters1[0]<1.0))
-	parameters2=parameters1[:,freq_pos]
-	parameters=sortrows(np.transpose(parameters2[:,:,0]))
-
-
+    
+	idx=[i for i,v in enumerate(freq) if v>0 and v<10]
 	resultado={
-		'Frecuency':parameters[:,0],
-		'Damping':parameters[:,1],
-		'Damp.ratio':parameters[:,2]
+		'Frequency':freq[idx],
+		'Damping':damp[idx],
+		'Damp.ratio':damp_ratio[idx],
 	}
-	return resultado
+	return resultado,(T0,T_end)
 
 
-def Matrix_Pencil(data,T0,T_end,threshold):
+def Matrix_Pencil(data,threshold,ti,tf=np.inf):
+	Fs,T=get_bounds(data,ti,tf)
+	T0,Tfi=T[0]
+	T_end,Tii=T[-1]
 	Fs=60
 	data=data.to_numpy()
 	print(data.shape)
@@ -192,7 +194,7 @@ def Matrix_Pencil(data,T0,T_end,threshold):
 		st1[k,:]=stna[k,:]-np.mean(stna[k,:])
 		pass
 
-	st=np.transpose(st1[:,T0:T_end])
+	st=np.transpose(st1[:,T0:T_end+1])
 	Nm=st.shape
 	tao=Ts
 
@@ -247,21 +249,26 @@ def Matrix_Pencil(data,T0,T_end,threshold):
 	damp=-lambdaR
 	damp_ratio=100*damp/lambdaI
 
-	parameters1=np.vstack([freq,damp])
-	parameters1=np.vstack([parameters1,damp_ratio])
+	#parameters1=np.vstack([freq,damp])
+	#parameters1=np.vstack([parameters1,damp_ratio])
 
-	freq_pos=np.argwhere((parameters1[0]>0.2) & (parameters1[0]<1.0))
-	parameters2=parameters1[:,freq_pos]
-	parameters=sortrows(np.transpose(parameters2[:,:,0]))
+	#freq_pos=np.argwhere((parameters1[0]>0.2) & (parameters1[0]<1.0))
+	#parameters2=parameters1[:,freq_pos]
+	#parameters=sortrows(np.transpose(parameters2[:,:,0]))
 
 
+	#resultado={
+	#	'Frecuency':parameters[:,0],
+	#	'Damping':parameters[:,1],
+	#	'Damp.ratio':parameters[:,2]
+	#}
+	idx=[i for i,v in enumerate(freq) if v>0 and v<10]
 	resultado={
-		'Frecuency':parameters[:,0],
-		'Damping':parameters[:,1],
-		'Damp.ratio':parameters[:,2]
+		'Frequency':freq[idx],
+		'Damping':damp[idx],
+		'Damp.ratio':damp_ratio[idx],
 	}
-
-	return resultado
+	return resultado,(T0,T_end)
 
 if __name__=="__main__":
     filename = 'Sample_Multi_methods.csv'

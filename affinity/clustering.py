@@ -13,7 +13,7 @@ import plotly.graph_objects as go
 #from affinity import Affinity
 import plotly.graph_objects as go
 import plotly.express as px
-from dcor import distance_correlation as dc
+#from dcor import distance_correlation as dc
 from plotly.subplots import make_subplots
 from matplotlib.colors import rgb2hex
 from matplotlib import pyplot as plt
