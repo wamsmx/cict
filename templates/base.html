@@ -1,6 +1,40 @@
 <html>
   <head>
     <link href="/static/media/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+    <font face = 'sans-serif' size='2'>
+   <link rel = 'stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css'>
+   <meta charset = 'utf-8'>
+   <style>
+       body{        
+            padding-top:    70px;
+            padding-bottom: 50px;
+            }
+         .fixed-header, .fixed-footer{
+            width:      100%;
+            position:   fixed;        
+            background: #333;
+            padding:    2px;
+            padding-bottom: 0px;
+            color:      #fff;
+            line-height: 1.5;
+            right:   0;
+            left:    0;
+            }
+         .fixed-header{
+            top:     0;
+            text-align: center;
+            font-size: 18px;
+            }
+         .fixed-footer{
+            bottom:  0;
+            text-align: center;
+            font-size: 15px;
+            }
+         .container{
+            width:   100%;
+            margin:  0 auto;
+            }
+   </style>
 <meta charset="UTF-8">
 <title>
   {% block title %}

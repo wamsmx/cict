@@ -1,0 +1,163 @@
+{% extends "basecats.html" %}
+{% block title %}
+WAMS México - ROMA
+{% endblock %}
+{% block content %}   
+      <div class = 'fixed-header'>
+         <div class = 'container'>
+            WAMS Mexico<br>
+            Ringdown Oscillations’ Monitoring and Analytics
+         </div>
+      </div>
+      <form method = 'POST' enctype='multipart/form-data'>
+         {% csrf_token %}
+
+         <input type = 'file'    name = 'examinar' value = 'examinar' accept = '.csv'>
+         <br>
+         <input type = 'submit'  name = 'upload'   value = 'Upload'   style = 'width: 80px'>
+
+         {% if file_name %}
+            <label>File loaded into memory: {{file_name}}</label>
+         {% endif %}
+
+      </form>
+
+      <form method = 'POST' enctype='multipart/form-data'>
+         {% csrf_token %}
+
+         {% if file_name %}
+            <input type="hidden" name="file_name" value={{file_name}}>
+            <input type="hidden" name="signals_name" value={{signals_name}}>
+         {% endif %}
+         <br>
+
+         <div class='tabs'>
+            <table>
+
+            <tr>
+               <td><b>Select CSV file layout:</b></td>
+               <td><input type="radio" id="vcsv" name="csv_layout" value="vcsv"> <label for="vcsv">vertical</label></td>
+               <td><input type="radio" id="hcsv" name="csv_layout" value="hcsv"> <label for="hcsv">horizontal</label></td>
+            </tr>
+
+            <tr>
+               <td>
+                  <b>Method:</b>
+               </td>
+               <td>
+                  <select name = 'method' id = 'method' value = '3'>
+                     <option value='1'> Prony </option>
+                     <option value='2'> Matrix Pencil </option>
+                     <option value='3'> ERA </option>
+                  </select>
+               </td>
+
+               <td>
+                  <select name='nsignal' id='nsignal'>
+                     <option value='1'>Single-channel</option>
+                     <option value='2'>Multi-channel</option>
+                  </select>
+               </td>
+            </tr>
+
+            <tr>
+               <td><b> Select signals:</b></td>
+               <td><input type='text' name='isignals_name' value = {{isignals_name}}></td>
+            </tr>
+
+            <tr>
+               <td><b> Downsampling factor:</b></td>
+               <td><input type='text' name='downsampling' value = {{downsampling}}></td>
+            </tr>
+
+            <tr>
+               <td><b> Prony order / Energy threshold (%):</b></td>
+               <td><input type='text' name='modes_energy' value = {{modes_energy}}></td>
+            </tr>
+
+            <tr>
+               <td><b>Time interval [start][end]:</b></td>
+               <td><input type='text', name='time_start' value = {{time_start}}></td>
+               <td><input type='text', name='time_end'   value = {{time_end}}></td>
+            </tr>
+
+            <tr>
+               <td><b>Fourier window [start][end]:</b></td>
+               <td><input type='text', name='fourier_start' value = {{fourier_start}}></td>
+               <td><input type='text', name='fourier_end'   value = {{fourier_end}}></td>
+            </tr>
+         </div>
+         </table>
+
+         <br>
+         <tr>
+            <td><input type='submit'  name='preview'  value='Preview'   style = 'width: 100px'></td>
+            <td><input type='submit'  name='analyze'  value='Analyze'   style = 'width: 100px'></td>
+            <td><input type='submit'  name='clear'    value='Clear'     style = 'width: 100px'></td>
+         </tr>
+      </form>
+
+      <a href="{% url 'user_guide' %}">User Guide</a>
+
+      <div class = 'container'>
+         <center>
+            {{ graph_preview|safe }}
+            {{ graph_preview_mean|safe }}
+         </center>
+      </div>
+
+      {% if res_table %}
+
+         <div class = 'container'>
+            <center>
+            {{ graph_fft|safe }}
+            {{ graph_svn|safe }}
+            {{ graph_sig|safe }}
+            {{ graph_msh|safe }}
+            {{ graph_pzr|safe }}
+            </center>
+            <br>
+            <br>
+            <center>
+               <p style='font-size: 16px; margin-bottom: 0em;  margin-top: 0em'>
+                  <b>Dynamic parameters</b></p>
+               <p style='font-size: 13px; margin-bottom: 0em;  margin-top: 0em'>
+                  <a href="{% url 'csv_write'%}">Export CSV File</a> | <a href="{% url 'latex_code'%}">Export Latex code</a></p>
+            </center>
+            
+            <table class = 'table table-striped'>
+               <thead class = 'thead-dark'>
+                  <tr>
+                     <th>Name</th>
+                     <th>Mode</th>
+                     <th>Type</th>
+                     <th>Frequency (Hz.)</th>
+                     <th>Amplitude</th>
+                     <th>Damping (1/s)</th>
+                     <th>Damping ratio (%)</th>
+                     <th>Phase (rad)</th>
+                     <th>Energy (%)</th>
+                  </tr>
+               </thead>
+
+               <tbody>
+                  {% for i in res_table %}
+                     <tr>
+                        {% for j in i %}
+                           <th>{{j}}</th>
+                        {% endfor %}
+                     </tr>
+                  {% endfor %}
+               </tbody>
+
+            </table>
+          </div>
+      {% endif %}
+      
+      <div class = 'fixed-footer'>
+         <div class = 'container'>
+            Web-based Wide-Area Monitoring Platform for Ringdown and Clustering Analytics in Power Systems <br>
+            Last update: 19-sep-2022
+         </div>
+      </div>
+{% endblock %}
