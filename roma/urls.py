@@ -22,7 +22,7 @@ from roma.views     import roma, csv_write, user_guide, latex_code
 
 
 urlpatterns = [
-    path('index/', roma, name='index'),
+    path('', roma, name='index'),
     path('user_guide/', user_guide, name='user_guide'),
     path('csv-write/', csv_write, name = 'csv_write'),
     path('latex_code/', latex_code, name = 'latex_code'),
