@@ -14,6 +14,7 @@ def roma(request):
 
     dic = {}
 
+
     if (request.method == 'POST') and ('upload' in request.POST):   
         uploaded_file = request.FILES['examinar']
         fs = FileSystemStorage()
