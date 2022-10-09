@@ -12,18 +12,19 @@ from roma.analyze_data          import analyze, get_signals_name, get_data
 
 def roma(request):
 
-    dic = {}
+    dic = {'csv_layout':'vcsv', 'file_name':'Datos_s1s5.csv', 'time_start':8, 'time_end':18,
+           'fourier_start':0, 'fourier_end':2, 'modes_energy':95, 'method':3}
 
     if (request.method == 'POST') and ('upload' in request.POST):   
         uploaded_file = request.FILES['examinar']
         fs = FileSystemStorage()
         fs.save(uploaded_file.name, uploaded_file)
-        dic['file_name']        = uploaded_file.name
+        dic['file_name']    = uploaded_file.name
 
 
     elif (request.method == 'POST') and ('preview' in request.POST):
         dic['file_name']        = request.POST['file_name']
-        dic['csv_layout']       = request.POST['csv_layout']
+        dic['csv_layout']       = request.POST.getlist('csv_layout')[0] #request.POST['csv_layout']
         dic['method']           = request.POST['method']
         dic['isignals_name']    = request.POST['isignals_name']
         dic['modes_energy']     = request.POST['modes_energy']
@@ -42,7 +43,7 @@ def roma(request):
 
     elif (request.method == 'POST') and ('analyze' in request.POST):
         dic['file_name']        = request.POST['file_name']
-        dic['csv_layout']       = request.POST['csv_layout']
+        dic['csv_layout']       = request.POST.getlist('csv_layout')[0]
         dic['method']           = request.POST['method']
         dic['isignals_name']    = request.POST['isignals_name']
         dic['modes_energy']     = request.POST['modes_energy']
@@ -68,8 +69,8 @@ def roma(request):
         
         request.session['dic'] = dic
 
-    elif (request.method == 'POST') and ('clear' in request.POST):
-        dic = {}
+    #elif (request.method == 'POST') and ('clear' in request.POST):
+    #    dic = {}
 
     return render(request, 'roma/index.html', dic)
 

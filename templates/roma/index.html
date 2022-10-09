@@ -36,8 +36,13 @@ WAMS México - ROMA
 
             <tr>
                <td><b>Select CSV file layout:</b></td>
-               <td><input type="radio" id="vcsv" name="csv_layout" value="vcsv"> <label for="vcsv">vertical</label></td>
-               <td><input type="radio" id="hcsv" name="csv_layout" value="hcsv"> <label for="hcsv">horizontal</label></td>
+               <td>
+		 <select name="csv_layout">
+		 <option value="vcsv" {% if csv_layout == "vcsv" %}selected {% endif %}> Vertical </option>
+		 <option value="hcsv" {% if csv_layout == "hcsv" %}selected {% endif %}> Horizontal</option>
+		 </select>
+	       </td>
+	       <td></td>
             </tr>
 
             <tr>
@@ -46,9 +51,9 @@ WAMS México - ROMA
                </td>
                <td>
                   <select name = 'method' id = 'method' value = '3'>
-                     <option value='1'> Prony </option>
-                     <option value='2'> Matrix Pencil </option>
-                     <option value='3'> ERA </option>
+                     <option value='1' {% if method == 1 %} selected {% endif %}> Prony </option>
+                     <option value='2' {% if method == 2 %} selected {% endif %}> Matrix Pencil </option>
+                     <option value='3' {% if method == 3 %} selected {% endif %}> ERA </option>
                   </select>
                </td>
 

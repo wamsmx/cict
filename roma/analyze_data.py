@@ -11,7 +11,7 @@ def get_data(media_path, dic):
 
 	csv_file = open(os.path.join(media_path, dic['file_name']))
 	csv_data = csv.reader(csv_file)
-
+	print(dic)
 	csv_list = []
 	for row in csv_data:
 		csv_list.append(row)
