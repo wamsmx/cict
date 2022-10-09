@@ -10,15 +10,18 @@ from scipy.fftpack              import fft, fftshift
 
 global font_size
 font_size = 13
+from matplotlib import cm
+import matplotlib.colors as mcolors
 
 
 def ncolors(n):
 
     if n == 1: n = 2
-
-    list = []
-    for i in range(n): list.append(i/(n-1))
-    return px.colors.sample_colorscale('Rainbow', list)
+    colors=cm.get_cmap('rainbow', n)
+    return [mcolors.rgb2hex(c) for c in colors(range(n))]
+    #list = []
+    #for i in range(n): list.append(i/(n-1))
+    #return px.colors.sample_colorscale('Rainbow', list)
 
 
 def fast_fourier_transform(dic, h_vec, y_vec, can, dt):
