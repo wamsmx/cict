@@ -13,6 +13,6 @@ By harnessing the potential of a realistic WAMS in Mexico, the ROMA’s project 
 - Online data recovery for Multi-channel PMU data processing.
 - High-dimensionality PMU data reduction through big data analytics.
 
-###  Acknowledgment 
+####  Acknowledgment 
 - Support provided by CONAHCYT through Project CF-2023-I-1174 within the framework of the "Ciencia de Frontera 2023".
 - Program for Research and Technological Innovation of UNAM (DGAPA, PAPIIT-2023-2025) through the project IT102723.
