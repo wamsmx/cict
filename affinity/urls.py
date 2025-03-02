@@ -11,7 +11,7 @@ urlpatterns = [
     re_path(r'clusters/(?P<d>[\w_]+)/$',views.clusters),
     path('mapmx/', mapmx),
     path('frequency/', frequency, name='frequency'),
-     path('angle/', angle, name='angle'),
+    path('angle/', angle, name='angle'),
     path('Home/', Home, name='Home'), 
     path('Zonemap/', Zonemap, name='Zonemap'),
     path('signals/', signals),

@@ -136,11 +136,16 @@ def groupsPlot2(data, table, ddf):
                if k==0:
                    k=k+1
                    for vid,y in enumerate(data.values):
-                       ci=fnames_dict[ddf.cluster_id.values[vid]]
-                       fig.add_trace(go.Scatter(y=y,mode='lines', showlegend=False, line_color=rgb2hex(cmap[ci%20])),
+                        ci=fnames_dict[ddf.cluster_id.values[vid]]
+                        if len(y)==2:
+                            fig.add_trace(go.Scatter(x=[y[0]], y=[y[1]], showlegend=False, line_color=rgb2hex(cmap[ci%20])),
+                                 row=i+1, col=j+1
+                            )
+                        else:
+                            fig.add_trace(go.Scatter(y=y,mode='lines', showlegend=False, line_color=rgb2hex(cmap[ci%20])),
                                            
                                  row=i+1, col=j+1
-                       )
+                            )
                elif specs[i][j]!=None:
                    cid=table['Area id'].values[k-1]
                    ci=fnames_dict[table.Center.values[k-1]]
@@ -150,11 +155,16 @@ def groupsPlot2(data, table, ddf):
                    k=k+1
                    control=True
                    for y,nm in zip(df.values,fn):
-                       fig.add_trace(go.Scatter(y=y,mode='lines', legendgroup =f'{k}', name=f'Area {cid}',
+                        if len(y)==2:
+                            fig.add_trace(go.Scatter(x=[y[0]], y=[y[1]], showlegend=False, line_color=rgb2hex(cmap[ci%20])),
+                                 row=i+1, col=j+1
+                            )
+                        else:
+                            fig.add_trace(go.Scatter(y=y,mode='lines', legendgroup =f'{k}', name=f'Area {cid}',
                                                 line_color=rgb2hex(cmap[ci%20]),showlegend=control),
                                      row=i+1, col=j+1
-                       )
-                       control=False
+                            )
+                        control=False
    fig.update_layout(height=800, width=900, title_text="Stacked Subplots")
    return fig
 

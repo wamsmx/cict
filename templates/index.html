@@ -1,709 +1,665 @@
 {% extends "basecats.html" %}
 {% block title %}
-        PMU  MEXICO
+PMU MEXICO
 {% endblock %}
 {% block content %}
 {% load static %}
-<div style="text-align: center; margin-left: 0rem; margin-right: 0rem; height: 90%; width: 100%; background-color: blanchedalmond;">
+<div
+  style="text-align: center; margin-left: 0rem; margin-right: 0rem; height: 90%; width: 100%; background-color: blanchedalmond;">
   <!--SVG for Map Background-->
-  <svg class="map-cont" id="map_bg" ></svg>
+  <svg class="map-cont" id="map_bg"></svg>
   <defs>
-    <marker
-      id="thearrow"
-      markerUnits="strokeWidth"
-      markerWidth="12"
-      markerHeight="12"
-      viewBox="0 0 12 12"
-      refX="6"
-      refY="6"
-      orient="auto">
+    <marker id="thearrow" markerUnits="strokeWidth" markerWidth="12" markerHeight="12" viewBox="0 0 12 12" refX="6"
+      refY="6" orient="auto">
       <path d="M2,2 L10,6 L2,10 L6,6 L2,2" style="fill: #f00;"></path>
     </marker>
   </defs>
   <div id="chart"></div>
 </div>
-   
 
 
-  
+
+
 <script>
-var current_id=1
-var color_loc= '#14213D'
-var Freq = ['','','','','','','','','',''];
-var angle= ['','','','','','','','','',''];
-var vtg=['','','','','','','','','',''];
-var angle_rad = [];
-var angle_cor = [];
-var angle_cor_0
-var angle_rad_0
-var angles
-function update_data() {
-   return data = [
-    {   
-    "index": 0,
-		"lat": 20.7,
-		"lon": -103.4,
-    'id': 'guadalajara',
-    'freq':Freq[0],
-    'angle':angle[0],
-    'fill':'#FF8427',
+  var current_id = 1
+  var color_loc = '#14213D'
+  var Freq = ['', '', '', '', '', '', '', '', '', ''];
+  var angle = ['', '', '', '', '', '', '', '', '', ''];
+  var vtg = ['', '', '', '', '', '', '', '', '', ''];
+  var angle_rad = [];
+  var angle_cor = [];
+  var angle_cor_0
+  var angle_rad_0
+  var angles
+  function update_data() {
+    return data = [
+      {
+        "index": 0,
+        "lat": 20.7,
+        "lon": -103.4,
+        'id': 'guadalajara',
+        'freq': Freq[0],
+        'angle': angle[0],
+        'fill': '#FF8427',
 
-	},
-	{
-		"index": 1,
-    "lat": 19.2,
-		"lon": -99.2,
-		"field": "Hz",
-    'id': 'CDMX',
-    'freq':Freq[1],
-    'angle':angle[1],
-    'fill':'#51bbfe',
-	}, 
-    {   
-    "index": 2,
-    "lat": 25.7,
-		"lon": -100.2,
-		"field": "Hz",
-    'id': 'monterrey'	,
-    'freq':Freq[2],
-    'angle':angle[2],
-    'fill':'#3D5A6C',
-	},
-    {   
-    "index": 3,
-    "lat": 19.7,
-		"lon": -101.2,
-		"field": "Hz",
-    'id': 'morelia'	,
-    'freq':Freq[3],
-    'angle':angle[3],
-    'fill':'#FFC800'	
-	},
-    {   
-    "index": 4,
-		"lat": 23.3,
-		"lon": -106.4,
-		"field": "Hz",	
-    'id': 'mazatlán',
-    'freq':Freq[4],
-    'angle':angle[4],
-    'fill':'#A393BF',
-	},
-    {   
-      "index": 5,
-		"lat": 18.5,
-		"lon": -88.3,
-		"field": "Hz",	
-    'id': 'chetumal',
-    'freq':Freq[5],
-    'angle':angle[5],
-    'fill':'#4D8B31'
-	},
-    {   
-    "index": 6,
-		"lat": 13.7,
-		"lon": -89.2,
-		"field": "Hz",	
-    'id': 'el salvador',
-    'freq':Freq[6],
-    'angle':angle[6],
-    'fill':'red',
-	},
-  {   
-		"index": 7,
-    "lat": 31.74,
-		"lon": -106.44,
-		"field": "Hz",	
-    'id': 'cd. juárez',
-    'freq':Freq[7],
-    'angle':angle[7],
-    'fill':'#F08CAE',
-	},
-  {   
-    "index": 8,
-		"lat": 16.74,
-		"lon": -93.17,
-		"field": "Hz",	
-    'id': 'chiapas',
-    'freq':Freq[8],
-    'angle':angle[8],
-    'fill':'#950952'
-	},
-  {   
-    "index": 9,
-		"lat":22.27,
-		"lon": -97.86,
-		"field": "Hz",	
-    'id': 'tampico',
-    'freq':Freq[9],
-    'angle':angle[9],
-    'fill':'#306DEA'
-	}, 
-  {   
-    "index": 10,
-		"lat":19.13,
-		"lon": -104.4,
-		"field": "Hz",	
-    'id': 'manzanillo',
-    'freq':Freq[9],
-    'angle':angle[9],
-    'fill':'#DAF7A6'
-	}
-
-  
-]}
-
-data = update_data()
-
-     // INITIALIZING VARIABLES
-    // The svg canvas on which the topojson map is generated.
-    const map_background_svg = d3.select("#map_bg");
-    // Width and height of the map window, adjusted by screen size.
-    
-    map_background_svg.style('background-color', 'rgb(171,205,239)');
-    // Width and height of the map window, adjusted by screen size.
-    var width;
-    var height;
-    var cx_ph   
-    var cy_ph
-
-    const requestData = async function () {
-
-      width = map_background_svg.node().getBoundingClientRect().width;
-      height = map_background_svg.node().getBoundingClientRect().height;
+      },
+      {
+        "index": 1,
+        "lat": 19.2,
+        "lon": -99.2,
+        "field": "Hz",
+        'id': 'CDMX',
+        'freq': Freq[1],
+        'angle': angle[1],
+        'fill': '#51bbfe',
+      },
+      {
+        "index": 2,
+        "lat": 25.7,
+        "lon": -100.2,
+        "field": "Hz",
+        'id': 'monterrey',
+        'freq': Freq[2],
+        'angle': angle[2],
+        'fill': '#3D5A6C',
+      },
+      {
+        "index": 3,
+        "lat": 19.7,
+        "lon": -101.2,
+        "field": "Hz",
+        'id': 'morelia',
+        'freq': Freq[3],
+        'angle': angle[3],
+        'fill': '#FFC800'
+      },
+      {
+        "index": 4,
+        "lat": 23.3,
+        "lon": -106.4,
+        "field": "Hz",
+        'id': 'mazatlán',
+        'freq': Freq[4],
+        'angle': angle[4],
+        'fill': '#A393BF',
+      },
+      {
+        "index": 5,
+        "lat": 18.5,
+        "lon": -88.3,
+        "field": "Hz",
+        'id': 'chetumal',
+        'freq': Freq[5],
+        'angle': angle[5],
+        'fill': '#4D8B31'
+      },
+      {
+        "index": 6,
+        "lat": 13.7,
+        "lon": -89.2,
+        "field": "Hz",
+        'id': 'el salvador',
+        'freq': Freq[6],
+        'angle': angle[6],
+        'fill': 'red',
+      },
+      {
+        "index": 7,
+        "lat": 31.74,
+        "lon": -106.44,
+        "field": "Hz",
+        'id': 'cd. juárez',
+        'freq': Freq[7],
+        'angle': angle[7],
+        'fill': '#F08CAE',
+      },
+      {
+        "index": 8,
+        "lat": 16.74,
+        "lon": -93.17,
+        "field": "Hz",
+        'id': 'chiapas',
+        'freq': Freq[8],
+        'angle': angle[8],
+        'fill': '#950952'
+      },
+      {
+        "index": 9,
+        "lat": 22.27,
+        "lon": -97.86,
+        "field": "Hz",
+        'id': 'tampico',
+        'freq': Freq[9],
+        'angle': angle[9],
+        'fill': '#306DEA'
+      },
+      {
+        "index": 10,
+        "lat": 19.13,
+        "lon": -104.4,
+        "field": "Hz",
+        'id': 'manzanillo',
+        'freq': Freq[9],
+        'angle': angle[9],
+        'fill': '#DAF7A6'
+      }
 
 
-       // MX Map
-       const map = map_background_svg.append("g")
-       const grid = map_background_svg.append("g")
-       grid.attr('class', 'text1')
+    ]
+  }
 
-      const mapZone= await d3.json("{% static 'media/json/Zonesmap.topojson' %}")
-      //console.log(mapZone)
-      var areas = topojson.feature(mapZone, mapZone.objects.collection);      
-      var areasMesh = topojson.mesh(mapZone, mapZone.objects.collection);
-      //var zoom = d3.zoom().on("zoom", zoomed);
-      
-      var projection = d3.geoMercator().scale(width).center([-114, 23.0]).translate([width / 4, height / 2]);
-      var path = d3.geoPath().projection(projection);
+  data = update_data()
 
-        let map_outline = map.selectAll("path.area_outline")
-        .data([areasMesh])
-        .join("path")
-        .attr("class", "area_outline")
-        .attr("d", path)
-        .attr("z-index", "0")
-        .attr("fill", "#A2E0C6")
-        .attr("stroke", "#5C7457")
-        .attr("stroke-width", "1.5px")
-        .style("stroke-linejoin", "round")
-        .attr('transform', 'translate(0,0)');
+  // INITIALIZING VARIABLES
+  // The svg canvas on which the topojson map is generated.
+  const map_background_svg = d3.select("#map_bg");
+  // Width and height of the map window, adjusted by screen size.
 
-    
+  map_background_svg.style('background-color', 'rgb(171,205,239)');
+  // Width and height of the map window, adjusted by screen size.
+  var width;
+  var height;
+  var cx_ph
+  var cy_ph
 
-      let window_info_width = width*0.3;
-      let window_info_height = width*0.20;
+  const requestData = async function () {
 
-      // now add the tooltip
-      let window_info = map_background_svg.append("g")
-        .attr("class", "window_info")
-        .attr("id", "window_info")
-        .attr("visibility", "visible")
-        .style("z-index", 99);
-
-        var x_w = width*0.64
-        var y_w= 40
-
-        window_info.append("rect")
-        .attr("fill", "rgba(222,239,243,0.6)")
-        .attr("x", x_w)
-        .attr("y", y_w)
-        .attr("rx", 10)
-        .attr("ry", 10)
-        .attr('class', 'window')
-        .style("z-index", 99)
-        .attr("width", window_info_width)
-        .attr("height", window_info_height);
+    width = map_background_svg.node().getBoundingClientRect().width;
+    height = map_background_svg.node().getBoundingClientRect().height;
 
 
-      window_info.append("text")
-        .attr("font-size", (height * 0.0035) + "rem")
-        .attr('fill', '#14213D')
-        .attr('font-weight', 'bold')
-        .text("Positive Frequency Phasor")
-        .attr("x", x_w + window_info_width*0.5)
-        .style("text-anchor","middle") 
-        .attr("y", y_w+35);
+    // MX Map
+    const map = map_background_svg.append("g")
+    const grid = map_background_svg.append("g")
+    grid.attr('class', 'text1')
 
+    const mapZone = await d3.json("{% static 'media/json/Zonesmap.topojson' %}")
+    //console.log(mapZone)
+    var areas = topojson.feature(mapZone, mapZone.objects.collection);
+    var areasMesh = topojson.mesh(mapZone, mapZone.objects.collection);
+    //var zoom = d3.zoom().on("zoom", zoomed);
 
-        
+    var projection = d3.geoMercator().scale(width).center([-114, 23.0]).translate([width / 4, height / 2]);
+    var path = d3.geoPath().projection(projection);
 
-        cx_ph= x_w +window_info_width*0.27       
-        cy_ph=y_w + window_info_height*0.55
-        var r_ph= window_info_width*0.18
-
-        window_info.append("circle")
-          .attr('cx',cx_ph)
-          .attr('cy', cy_ph)
-          .attr('r',r_ph)
-          .attr("fill", "none")
-          .attr('stroke-width', "3px")
-          .attr('stroke', "#14213D")
-
-        window_info.append("text")
-        .attr("fill", "#EC3115")
-        .attr("font-size", ( r_ph * 0.017) + "rem")
-        .attr('fill', '#14213D')
-        .attr('font-weight', '400')
-        .text("0°")
-        .attr("x",cx_ph+r_ph*1.05)
-        .attr("y", cy_ph);
-        
-        window_info.append("text")
-        .attr("fill", "#EC3115")
-        .attr("font-size", ( r_ph * 0.017) + "rem")
-        .attr('fill', '#14213D')
-        .attr('font-weight', '400')
-        .text("180°")
-        .attr("x",cx_ph-r_ph*1.40)
-        .attr("y", cy_ph);
-
-        window_info.append("text")
-        .attr("fill", "#EC3115")
-        .attr("font-size", ( r_ph * 0.017) + "rem")
-        .attr('fill', '#14213D')
-        .attr('font-weight', '400')
-        .text("90°")
-        .attr("x",cx_ph*0.99)
-        .attr("y", cy_ph-r_ph*1.1);
-
-        window_info.append("text")
-        .attr("fill", "#EC3115")
-        .attr("font-size", ( r_ph * 0.017) + "rem")
-        .attr('fill', '#14213D')
-        .attr('font-weight', '400')
-        .text("270°")
-        .attr("x",cx_ph*0.99)
-        .attr("y", cy_ph+r_ph*1.2);
-
-      data_line=[{'fill':'#4D8B31'}, {'fill':'#3D5A6C'},{'fill':'#FFC800'},{'fill':'#FF8427'},{'fill':'#A393BF'}, {'fill':'red'},
-                 {'fill':'#950952'}, {'fill':'#F08CAE'},{'fill':'#51bbfe'}, {'fill':'#306DEA'}, {'fill': '#DAF7A6'}]
-
-      data_t=['chetumal', 'monterrey', 'morelia', 'guadalajara', 'mazatlán', 'el salvador', 'chiapas', 'cd. juárez', 'CDMX', 'tampico', 'manzanillo' ]
-
-       window_info.selectAll('line')
-        .attr("d", path)
-        .data(data_line)
-        .enter().append('line')      
-        .attr('x1',cx_ph)
-        .attr('y1',cy_ph)
-        .attr('x2',cx_ph+r_ph*0.85)
-        .attr('y2',cy_ph) 
-        .attr('stroke-width',( r_ph * 0.005) + "rem") 
-        .attr("marker-end",  function (d, i) {return `url(#triangle${i})`})
-        .attr('stroke', function (d) {return d.fill})
-        .attr('fill', function (d) {return d.fill})
-        .attr("transform", `rotate(-45 ${cx_ph} ${cy_ph})`) ;
+    let map_outline = map.selectAll("path.area_outline")
+      .data([areasMesh])
+      .join("path")
+      .attr("class", "area_outline")
+      .attr("d", path)
+      .attr("z-index", "0")
+      .attr("fill", "#A2E0C6")
+      .attr("stroke", "#5C7457")
+      .attr("stroke-width", "1.5px")
+      .style("stroke-linejoin", "round")
+      .attr('transform', 'translate(0,0)');
 
 
 
-       //arrow `Hello ${name}!`
-       window_info.selectAll("svg")
-        .attr("d", path)
-        .data(data_line)
-        .enter().append("svg:defs").append("svg:marker")
-        .attr("id", function (d, i) {return`triangle${i}`})
-        .attr("refX", 6)
-        .attr("refY", 6)
-        .attr("markerWidth", 30)
-        .attr("markerHeight", 30)
-        .attr("markerUnits","userSpaceOnUse")
-        .attr("orient", "auto")
-        .append("path")
-        .attr("d", "M 0 0 12 6 0 12 3 6")
-        .style("fill", function (d) {return d.fill});
+    let window_info_width = width * 0.3;
+    let window_info_height = width * 0.20;
 
-      window_info.append("circle")
-      .attr('cx',cx_ph)
-      .attr('cy', cy_ph )
-      .attr('r',r_ph*0.06)
+    // now add the tooltip
+    let window_info = map_background_svg.append("g")
+      .attr("class", "window_info")
+      .attr("id", "window_info")
+      .attr("visibility", "visible")
+      .style("z-index", 99);
+
+    var x_w = width * 0.64
+    var y_w = 40
+
+    window_info.append("rect")
+      .attr("fill", "rgba(222,239,243,0.6)")
+      .attr("x", x_w)
+      .attr("y", y_w)
+      .attr("rx", 10)
+      .attr("ry", 10)
+      .attr('class', 'window')
+      .style("z-index", 99)
+      .attr("width", window_info_width)
+      .attr("height", window_info_height);
+
+
+    window_info.append("text")
+      .attr("font-size", (height * 0.0035) + "rem")
+      .attr('fill', '#14213D')
+      .attr('font-weight', 'bold')
+      .text("Positive Frequency Phasor")
+      .attr("x", x_w + window_info_width * 0.5)
+      .style("text-anchor", "middle")
+      .attr("y", y_w + 35);
+
+
+
+
+    cx_ph = x_w + window_info_width * 0.27
+    cy_ph = y_w + window_info_height * 0.55
+    var r_ph = window_info_width * 0.18
+
+    window_info.append("circle")
+      .attr('cx', cx_ph)
+      .attr('cy', cy_ph)
+      .attr('r', r_ph)
+      .attr("fill", "none")
+      .attr('stroke-width', "3px")
+      .attr('stroke', "#14213D")
+
+    window_info.append("text")
+      .attr("fill", "#EC3115")
+      .attr("font-size", (r_ph * 0.017) + "rem")
+      .attr('fill', '#14213D')
+      .attr('font-weight', '400')
+      .text("0°")
+      .attr("x", cx_ph + r_ph * 1.05)
+      .attr("y", cy_ph);
+
+    window_info.append("text")
+      .attr("fill", "#EC3115")
+      .attr("font-size", (r_ph * 0.017) + "rem")
+      .attr('fill', '#14213D')
+      .attr('font-weight', '400')
+      .text("180°")
+      .attr("x", cx_ph - r_ph * 1.40)
+      .attr("y", cy_ph);
+
+    window_info.append("text")
+      .attr("fill", "#EC3115")
+      .attr("font-size", (r_ph * 0.017) + "rem")
+      .attr('fill', '#14213D')
+      .attr('font-weight', '400')
+      .text("90°")
+      .attr("x", cx_ph * 0.99)
+      .attr("y", cy_ph - r_ph * 1.1);
+
+    window_info.append("text")
+      .attr("fill", "#EC3115")
+      .attr("font-size", (r_ph * 0.017) + "rem")
+      .attr('fill', '#14213D')
+      .attr('font-weight', '400')
+      .text("270°")
+      .attr("x", cx_ph * 0.99)
+      .attr("y", cy_ph + r_ph * 1.2);
+
+    data_line = [{ 'fill': '#4D8B31' }, { 'fill': '#3D5A6C' }, { 'fill': '#FFC800' }, { 'fill': '#FF8427' }, { 'fill': '#A393BF' }, { 'fill': 'red' },
+    { 'fill': '#950952' }, { 'fill': '#F08CAE' }, { 'fill': '#51bbfe' }, { 'fill': '#306DEA' }, { 'fill': '#DAF7A6' }]
+
+    data_t = ['chetumal', 'monterrey', 'morelia', 'guadalajara', 'mazatlán', 'el salvador', 'chiapas', 'cd. juárez', 'CDMX', 'tampico', 'manzanillo']
+
+    window_info.selectAll('line')
+      .attr("d", path)
+      .data(data_line)
+      .enter().append('line')
+      .attr('x1', cx_ph)
+      .attr('y1', cy_ph)
+      .attr('x2', cx_ph + r_ph * 0.85)
+      .attr('y2', cy_ph)
+      .attr('stroke-width', (r_ph * 0.005) + "rem")
+      .attr("marker-end", function (d, i) { return `url(#triangle${i})` })
+      .attr('stroke', function (d) { return d.fill })
+      .attr('fill', function (d) { return d.fill })
+      .attr("transform", `rotate(-45 ${cx_ph} ${cy_ph})`);
+
+
+
+    //arrow `Hello ${name}!`
+    window_info.selectAll("svg")
+      .attr("d", path)
+      .data(data_line)
+      .enter().append("svg:defs").append("svg:marker")
+      .attr("id", function (d, i) { return `triangle${i}` })
+      .attr("refX", 6)
+      .attr("refY", 6)
+      .attr("markerWidth", 30)
+      .attr("markerHeight", 30)
+      .attr("markerUnits", "userSpaceOnUse")
+      .attr("orient", "auto")
+      .append("path")
+      .attr("d", "M 0 0 12 6 0 12 3 6")
+      .style("fill", function (d) { return d.fill });
+
+    window_info.append("circle")
+      .attr('cx', cx_ph)
+      .attr('cy', cy_ph)
+      .attr('r', r_ph * 0.06)
       .attr("fill", "#14213D")
       .attr('stroke-width', "3px")
       .attr('stroke', "#14213D")
 
-      static_text=window_info.append('g')
-      static_text.selectAll('circle')
-        .attr("d", path)
-        .data(data_line)
-        .enter().append("circle")
-        .attr("fill", function (d) {return d.fill})
-        .attr("cx", x_w + window_info_width*0.6 )
-        .attr("cy", function (d,i) {return y_w*2.6 + window_info_height*0.07*i}) 
-        .attr("r", r_ph*0.07);
+    static_text = window_info.append('g')
+    static_text.selectAll('circle')
+      .attr("d", path)
+      .data(data_line)
+      .enter().append("circle")
+      .attr("fill", function (d) { return d.fill })
+      .attr("cx", x_w + window_info_width * 0.6)
+      .attr("cy", function (d, i) { return y_w * 2.6 + window_info_height * 0.07 * i })
+      .attr("r", r_ph * 0.07);
 
-      static_text.selectAll('text')
-        .attr("d", path)
-        .data(data_t)
-        .enter().append("text")
-        .attr("font-size",(r_ph * 0.017) + "rem")
-        .attr('fill', '#14213D')
-        .attr('font-weight', '400')
-        .text(function (d) {return d})
-        .attr("x", x_w + window_info_width*0.66 )
-        .style('text-transform', 'capitalize')
-        .attr("y", function (d,i) {return y_w*2.7 + window_info_height*0.07*i}) 
-        
-
-            
-          map.on("click", function () { 
-              var pos=d3.mouse(this)
-              console.log('X,Y',pos)
-              console.log('LAT,LOT', projection.invert([pos[0], pos[1]]))
-             } )
-
-             [-101.35226574660666, 17.59368461940543]
-        
-          // CREATE LINE 1    
-
-        const data_l = [{'class' :'cdjuares-cdmx','X0':-106.44,'Y0':31.74,'X1':-101.98,'Y1':25.239},
-                        {'class' :'cdjuares-cdmx','X0':-101.98,'Y0':25.239,'X1':-99.2,'Y1':19.2},
-                        {'class' :'slvd-chiapas','X0':-89.2,'Y0':13.7,'X1':-93.17,'Y1':16.74},
-                        {'class' :'chiapas-cdmx','X0':-93.17,'Y0':16.74,'X1':-99.2,'Y1':19.2},
-                        {'class' :'chetmal-cdmx','X0':-88.3,'Y0':18.5,'X1':-99.2,'Y1':19.2},
-                        {'class' :'morelia-cdmx','X0':-101.2,'Y0':19.7,'X1':-99.2,'Y1':19.2},
-                        {'class' :'gdlr-cdmx','X0':-103.4,'Y0':20.7,'X1':-101.97,'Y1':18.67},
-                        {'class' :'gdlr-cdmx','X0':-101.97,'Y0':18.67,'X1':-99.2,'Y1':19.2},
-                        {'class' :'mztln-cdmx','X0':-106.4,'Y0':23.3,'X1':-101.896,'Y1':21.93},
-                        {'class' :'mztln-cdmx','X0':-101.896,'Y0':21.93,'X1':-99.2,'Y1':19.2},
-                        {'class' :'mty-cdmx','X0':-100.2,'Y0':25.7,'X1':-99.2,'Y1':19.2},
-						            {'class' :'tmp-cdmx','X0':-99.2,'Y0':19.2,'X1':-97.9,'Y1':22.3},
-                        {'class' :'mnzlo-cdmx','X0':-104.4,'Y0':19.13,'X1':-101.4,'Y1':17.6},
-                        {'class' :'mnzlo-cdmx','X0':-101.4,'Y0':17.6,'X1':-99.2,'Y1':19.2} ]
-
-          const data_p = [{'class' :'cdjuares-cdmx','cx':-101.98,'cy':25.239},
-                          {'class' :'slvd-chiapas','cx':-91.185,'cy':15.22},
-                          {'class' :'chiapas-cdmx','cx':-96.185,'cy':17.97},
-                          {'class' :'chetmal-cdmx','cx':-93.75,'cy':18.85},
-                          {'class' :'morelia-cdmx','cx':-100.2,'cy':19.45},
-                          {'class' :'gdlr-cdmx','cx':-101.97,'cy':18.9},
-                          {'class' :'mztln-cdmx','cx':-101.896,'cy':21.93},
-                          {'class' :'mty-cdmx','cx':-99.7,'cy':22.45},
-						              {'class' :'tmp-cdmx','cx':-98.5,'cy':20.77}, 
-                          {'class' :'mnzlo-cdmx','cx':-101.4,'cy':17.8}
-                          ]
-
-          grid.selectAll('line')
-          .attr("d", path)
-          .data(data_l)
-          .attr("visibility", "visible")
-          .enter().append('line')      
-          .attr('x1',function (d) {return projection([d.X0, d.Y0])[0];})
-          .attr('y1',function (d) {return projection([d.X0, d.Y0])[1];})
-          .attr('x2',function (d) {return projection([d.X1, d.Y1])[0];})
-          .attr('y2',function (d) {return projection([d.X1, d.Y1])[1];})  
-          .attr('stroke-width', "3px")
-          .attr('stroke', "grey")
-          .attr('class', function (d) {return d.class});
-
-          grid.selectAll("circle")
-          .attr("d", path)
-          .data(data_p)  
-          .enter().append('circle') 
-          .attr("r",height*0.02)
-          .attr('cx', function (d) {return projection([d.cx, d.cy])[0];})
-          .attr('cy', function (d) {return projection([d.cx, d.cy])[1];})
-          .attr('id',function (d) {return d.ID})
-          .attr('class', function (d) {return d.class})
-          .attr("fill", "#DEDEDE")
-          .attr("stroke", "white")
-          .attr('stroke-width', height*0.0005)   
-
-          grid.selectAll("text")
-          .attr("d", path)
-          .data(data_p)  
-          .enter().append("text")        
-          .attr('x', function (d) {return projection([d.cx, d.cy])[0];})
-          .attr('y', function (d) {return projection([d.cx, d.cy])[1]+height * 0.0039;})
-          .style("text-anchor","middle")       
-          .attr("font-size", (height * 0.0014) + "rem")  
-          .text("-°")
-          .attr("font-weight", "bold")
-          .attr('class', function (d) {return d.class});  
-       
-
-
-      dots= grid.append("g")
-        .attr("d", path)
-        .attr("class", "dots")
-        .style("z-index", 1);
-
-        
-        dots.selectAll("circle")
-        .attr("d", path)
-        .data(data)  
-        .enter().append('circle') 
-        .attr('id', function (d){return d.index} )
-        .attr("r", 7)
-        .attr("cx", function (d) {return projection([d.lon, d.lat])[0];})
-        .attr("cy", function (d) {return projection([d.lon, d.lat])[1];})
-        .attr("fill", function (d) {return d.fill})
-        .attr('stroke-width', "1.5px")
-        .attr('stroke', "gray")
-        
-        .on('mouseover', function(d, i) {
-      // make the mouseover'd element
-      
-      // bigger and red
-      var the_id = d3.select(this).attr('id')
-      current_id = d.index
-      d3.select(this)
-        .transition()
-        .duration(75)
-        .attr('r', 15)
-        .attr('fill', function (d) {
-          color_loc = d.fill
-          d3.select('.location')
-         .attr('fill', color_loc)
-         .attr('font-weight', 'bold');
-          return d.fill});})
-        .on('mouseout', function(d, i) {
-          // return the mouseover'd element
-          // to being smaller and black
-          d3.select(this)
-            .transition()
-            .duration(75)
-            .attr('r', 7)
-            .attr('fill',  function (d) {return d.fill});
-        })
-
-
-        info = map_background_svg.append("g")
-        .attr("d", path)
-        .attr("class", "dots")
-        .style("z-index", 1);
-
-        var info_x = width*0.015
-        var info_y = height*0.15
-        width1=width*0.15
-        height1=height*0.3
-      
-        info.append('rect')
-        .attr("fill", "rgba(255,255,255,0.4)")
-        .attr("x", info_x)
-        .attr("y", info_y)
-        .attr("rx", 10)
-        .attr("ry", 10)
-        .attr("width",width1 )
-        .attr("height",height1);
-        
-        info.append("text")
-        .attr("font-size", (width1 * 0.009) + "rem")
-        .attr('fill', '#14213D')
-        .attr('font-weight', 'bold')
-        .attr('text-anchor', 'middle')
-        .text("Measurements")
-        .attr("x", info_x+width1*0.5)
-        .attr("y", info_y*1.3);
-
-       
-        data_inf=['location', 'lon', 'lat', 'frequency', 'voltage', 'angle']
-
-        info_text=info.append('g')
-        
-
-        info_text.selectAll('text')
-        .attr("d", path)
-        .data(data_inf)  
-        .enter().append('text')
-        .attr("fill", "#EC3115")
-        .attr("font-size",(width1 * 0.006) + "rem")
-        .attr('fill', '#14213D')
-        .attr('font-weight', 'bold')
-        .attr('text-anchor', 'end')
-        .text(function (d) {return `${d}:`})
-        .attr("x", info_x + width1*0.45)
-        .style('text-transform', 'capitalize')
-        .attr("y", function (d,i) {return info_y*1.6 + height1*0.13*i});
-
-        info_point=info.append('g')
-        .attr('class', 'data')
-
-        info_point.selectAll('text')
-        .attr("d", path)
-        .data(data_inf)  
-        .enter().append('text')
-        .attr("fill", "#EC3115")
-        .attr("font-size",(width1 * 0.006) + "rem")
-        .attr('fill', '#14213D')
-        .attr('font-weight', '400')
-        .text('--')
-        .attr("x",info_x + width1*0.55)
-        .attr('class', function (d) {return d})
-        .style('text-transform', 'capitalize')
-        .attr("y", function (d,i) {return info_y*1.6 + height1*0.13*i});
+    static_text.selectAll('text')
+      .attr("d", path)
+      .data(data_t)
+      .enter().append("text")
+      .attr("font-size", (r_ph * 0.017) + "rem")
+      .attr('fill', '#14213D')
+      .attr('font-weight', '400')
+      .text(function (d) { return d })
+      .attr("x", x_w + window_info_width * 0.66)
+      .style('text-transform', 'capitalize')
+      .attr("y", function (d, i) { return y_w * 2.7 + window_info_height * 0.07 * i })
 
 
 
+    map.on("click", function () {
+      var pos = d3.mouse(this)
+      console.log('X,Y', pos)
+      console.log('LAT,LOT', projection.invert([pos[0], pos[1]]))
+    })
 
-       // var data_chart = [20, 10, 3, 4, 17, 5, 22, 7];
+    [-101.35226574660666, 17.59368461940543]
 
-        
-        
-        
+    // CREATE LINE 1    
 
-        
+    const data_l = [{ 'class': 'cdjuares-cdmx', 'X0': -106.44, 'Y0': 31.74, 'X1': -101.98, 'Y1': 25.239 },
+    { 'class': 'cdjuares-cdmx', 'X0': -101.98, 'Y0': 25.239, 'X1': -99.2, 'Y1': 19.2 },
+    { 'class': 'slvd-chiapas', 'X0': -89.2, 'Y0': 13.7, 'X1': -93.17, 'Y1': 16.74 },
+    { 'class': 'chiapas-cdmx', 'X0': -93.17, 'Y0': 16.74, 'X1': -99.2, 'Y1': 19.2 },
+    { 'class': 'chetmal-cdmx', 'X0': -88.3, 'Y0': 18.5, 'X1': -99.2, 'Y1': 19.2 },
+    { 'class': 'morelia-cdmx', 'X0': -101.2, 'Y0': 19.7, 'X1': -99.2, 'Y1': 19.2 },
+    { 'class': 'gdlr-cdmx', 'X0': -103.4, 'Y0': 20.7, 'X1': -101.97, 'Y1': 18.67 },
+    { 'class': 'gdlr-cdmx', 'X0': -101.97, 'Y0': 18.67, 'X1': -99.2, 'Y1': 19.2 },
+    { 'class': 'mztln-cdmx', 'X0': -106.4, 'Y0': 23.3, 'X1': -101.896, 'Y1': 21.93 },
+    { 'class': 'mztln-cdmx', 'X0': -101.896, 'Y0': 21.93, 'X1': -99.2, 'Y1': 19.2 },
+    { 'class': 'mty-cdmx', 'X0': -100.2, 'Y0': 25.7, 'X1': -99.2, 'Y1': 19.2 },
+    { 'class': 'tmp-cdmx', 'X0': -99.2, 'Y0': 19.2, 'X1': -97.9, 'Y1': 22.3 },
+    { 'class': 'mnzlo-cdmx', 'X0': -104.4, 'Y0': 19.13, 'X1': -101.4, 'Y1': 17.6 },
+    { 'class': 'mnzlo-cdmx', 'X0': -101.4, 'Y0': 17.6, 'X1': -99.2, 'Y1': 19.2 }]
 
+    const data_p = [{ 'class': 'cdjuares-cdmx', 'cx': -101.98, 'cy': 25.239 },
+    { 'class': 'slvd-chiapas', 'cx': -91.185, 'cy': 15.22 },
+    { 'class': 'chiapas-cdmx', 'cx': -96.185, 'cy': 17.97 },
+    { 'class': 'chetmal-cdmx', 'cx': -93.75, 'cy': 18.85 },
+    { 'class': 'morelia-cdmx', 'cx': -100.2, 'cy': 19.45 },
+    { 'class': 'gdlr-cdmx', 'cx': -101.97, 'cy': 18.9 },
+    { 'class': 'mztln-cdmx', 'cx': -101.896, 'cy': 21.93 },
+    { 'class': 'mty-cdmx', 'cx': -99.7, 'cy': 22.45 },
+    { 'class': 'tmp-cdmx', 'cx': -98.5, 'cy': 20.77 },
+    { 'class': 'mnzlo-cdmx', 'cx': -101.4, 'cy': 17.8 }
+    ]
 
-          }
+    grid.selectAll('line')
+      .attr("d", path)
+      .data(data_l)
+      .attr("visibility", "visible")
+      .enter().append('line')
+      .attr('x1', function (d) { return projection([d.X0, d.Y0])[0]; })
+      .attr('y1', function (d) { return projection([d.X0, d.Y0])[1]; })
+      .attr('x2', function (d) { return projection([d.X1, d.Y1])[0]; })
+      .attr('y2', function (d) { return projection([d.X1, d.Y1])[1]; })
+      .attr('stroke-width', "3px")
+      .attr('stroke', "grey")
+      .attr('class', function (d) { return d.class });
 
-  
-      requestData(); // execute
+    grid.selectAll("circle")
+      .attr("d", path)
+      .data(data_p)
+      .enter().append('circle')
+      .attr("r", height * 0.02)
+      .attr('cx', function (d) { return projection([d.cx, d.cy])[0]; })
+      .attr('cy', function (d) { return projection([d.cx, d.cy])[1]; })
+      .attr('id', function (d) { return d.ID })
+      .attr('class', function (d) { return d.class })
+      .attr("fill", "#DEDEDE")
+      .attr("stroke", "white")
+      .attr('stroke-width', height * 0.0005)
 
-      
-      function getAngle() {
-          const url = '/cict/app/angle/';
-            fetch(url)
-                .then( resultado => resultado.json())
-                .then( datos => {
-                    angleInfo= JSON.parse(datos.data);
-                    angle=angleInfo.TimeSeriesDataPoints;
-                    
-                    [MOR, CHPAS, GUAD, CDMX, MTREY, MXTLAN, CHMAL, SLV, TMP, CDJRZ, MNZLO] = angle;
-                    /*175,11,63,90,85,58,53,68/json"
-                    175: Morelia, Michoacan  DPMU
-                    11: Morelia, Michoacan  1408 -- Chiapas
-                    63: Guadalajara, Jalisco  1378
-                    90: UNAM, Mexico City (old 44) 1385
-                    85: Monterrey, Nuevo León 1389
-                    58: Mazatlan, Sinaloa 1422
-                    53: Chetumal, Quintana Roo 1424
-                    68: El Salvador, El Salvador 1628 */
-
-                    angle =[(CHMAL.Value).toFixed(2), (MTREY.Value).toFixed(2), (MOR.Value).toFixed(2), (GUAD.Value).toFixed(2), (MXTLAN.Value).toFixed(2), 
-                    (SLV.Value).toFixed(2), (CHPAS.Value).toFixed(2),(CDJRZ.Value).toFixed(2), (CDMX.Value).toFixed(2), (TMP.Value).toFixed(2), (MNZLO.Value).toFixed(2) ]
-					          data = update_data()
-                    arrow_class = d3.select("#window_info")
-                    arrow=arrow_class.selectAll('line')
-                    //console.log(arrow)
-                    arrow.data(angle)
-                    arrow.attr("transform", function(d) { return `rotate(${-d} ${cx_ph} ${cy_ph})`}) 
-                })
-	
- 
-              }
-			  
-	function getAttr() {
-
-                const url_freq = '/cict/app/frequency/';
-
-                fetch(url_freq)
-                    .then( resultado => resultado.json())
-                    .then( datos => {
-                        PMU= JSON.parse(datos.data);
-                        perPMU=PMU.TimeSeriesDataPoints;
-                         [MOR ,CHPAS, GUAD, CDMX, MTREY, MXTLAN, CHMAL, SLV, TMP, CDJRZ, MNZLO] = perPMU;
-                      
-                        /*171,7,59,86,81,54,49,64/json"
-                        171: Morelia, Michoacan  DPMU
-                        7: Morelia, Michoacan  1408 --Chiapas
-                        59: Guadalajara, Jalisco  1378
-                        86: UNAM, Mexico City (old 44) 1385
-                        81: Monterrey, Nuevo León 1389
-                        54: Mazatlan, Sinaloa 1422
-                        49: Chetumal, Quintana Roo 1424
-                        64: El Salvador, El Salvador 1628 */
-                        
-                        Freq =[GUAD.Value, CDMX.Value, MTREY.Value,MOR.Value,MXTLAN.Value,CHMAL.Value, SLV.Value, CHPAS.Value, CDJRZ.Value, TMP.Value, MNZLO.Value]
-                        data=update_data()
-
-                    }) 
-              
-                    d3.select(".location").text(`${data[current_id].id}`)
-                    d3.select(".lat").text(`${data[current_id].lat}°`)
-                    d3.select(".lon").text(`${data[current_id].lon}°`)
-                    d3.select(".frequency").text(`${(data[current_id].freq)} Hz`)  
-					          d3.select(".angle").text(`${(data[current_id].angle)}°`)						
-
-              }
+    grid.selectAll("text")
+      .attr("d", path)
+      .data(data_p)
+      .enter().append("text")
+      .attr('x', function (d) { return projection([d.cx, d.cy])[0]; })
+      .attr('y', function (d) { return projection([d.cx, d.cy])[1] + height * 0.0039; })
+      .style("text-anchor", "middle")
+      .attr("font-size", (height * 0.0014) + "rem")
+      .text("-°")
+      .attr("font-weight", "bold")
+      .attr('class', function (d) { return d.class });
 
 
 
-        
-  let socket =new WebSocket('ws://148.216.38.78/ws/polData/');
-  socket.onopen =function(e){
-     
-  };
-
-  var chart_x = width*0.015
-  var chart_y = height*0.55
-  var width_01 = width*0.37
-  var height_01 = height*0.37
+    dots = grid.append("g")
+      .attr("d", path)
+      .attr("class", "dots")
+      .style("z-index", 1);
 
 
-  
+    dots.selectAll("circle")
+      .attr("d", path)
+      .data(data)
+      .enter().append('circle')
+      .attr('id', function (d) { return d.index })
+      .attr("r", 7)
+      .attr("cx", function (d) { return projection([d.lon, d.lat])[0]; })
+      .attr("cy", function (d) { return projection([d.lon, d.lat])[1]; })
+      .attr("fill", function (d) { return d.fill })
+      .attr('stroke-width', "1.5px")
+      .attr('stroke', "gray")
+
+      .on('mouseover', function (d, i) {
+        // make the mouseover'd element
+
+        // bigger and red
+        var the_id = d3.select(this).attr('id')
+        current_id = d.index
+        d3.select(this)
+          .transition()
+          .duration(75)
+          .attr('r', 15)
+          .attr('fill', function (d) {
+            color_loc = d.fill
+            d3.select('.location')
+              .attr('fill', color_loc)
+              .attr('font-weight', 'bold');
+            return d.fill
+          });
+      })
+      .on('mouseout', function (d, i) {
+        // return the mouseover'd element
+        // to being smaller and black
+        d3.select(this)
+          .transition()
+          .duration(75)
+          .attr('r', 7)
+          .attr('fill', function (d) { return d.fill });
+      })
 
 
-  socket.onmessage = function(e){
-      
-      var recData=JSON.parse(e.data);
-    
-      //UPDATE RELATIVE ANGLE 
-      the_text=d3.selectAll(".text1")                
-      angleT=the_text.selectAll("text")
-      angleT.data(recData.value);
-      angleT.text(function(d) { return (`${d}°`); }); 
-      
-      // Real-time line chart
-    
-    /*      
-      data_chart.push(recData.value[0]);
+    info = map_background_svg.append("g")
+      .attr("d", path)
+      .attr("class", "dots")
+      .style("z-index", 1);
 
-      if (data_chart.length > 35) data_chart.splice(0, 1);
-      
-      console.log('data_chart', data_chart, recData.value[0])
-      
-      renderLine(data_chart, svg_chart_line) */
+    var info_x = width * 0.015
+    var info_y = height * 0.15
+    width1 = width * 0.15
+    height1 = height * 0.3
+
+    info.append('rect')
+      .attr("fill", "rgba(255,255,255,0.4)")
+      .attr("x", info_x)
+      .attr("y", info_y)
+      .attr("rx", 10)
+      .attr("ry", 10)
+      .attr("width", width1)
+      .attr("height", height1);
+
+    info.append("text")
+      .attr("font-size", (width1 * 0.009) + "rem")
+      .attr('fill', '#14213D')
+      .attr('font-weight', 'bold')
+      .attr('text-anchor', 'middle')
+      .text("Measurements")
+      .attr("x", info_x + width1 * 0.5)
+      .attr("y", info_y * 1.3);
+
+
+    data_inf = ['location', 'lon', 'lat', 'frequency', 'voltage', 'angle']
+
+    info_text = info.append('g')
+
+
+    info_text.selectAll('text')
+      .attr("d", path)
+      .data(data_inf)
+      .enter().append('text')
+      .attr("fill", "#EC3115")
+      .attr("font-size", (width1 * 0.006) + "rem")
+      .attr('fill', '#14213D')
+      .attr('font-weight', 'bold')
+      .attr('text-anchor', 'end')
+      .text(function (d) { return `${d}:` })
+      .attr("x", info_x + width1 * 0.45)
+      .style('text-transform', 'capitalize')
+      .attr("y", function (d, i) { return info_y * 1.6 + height1 * 0.13 * i });
+
+    info_point = info.append('g')
+      .attr('class', 'data')
+
+    info_point.selectAll('text')
+      .attr("d", path)
+      .data(data_inf)
+      .enter().append('text')
+      .attr("fill", "#EC3115")
+      .attr("font-size", (width1 * 0.006) + "rem")
+      .attr('fill', '#14213D')
+      .attr('font-weight', '400')
+      .text('--')
+      .attr("x", info_x + width1 * 0.55)
+      .attr('class', function (d) { return d })
+      .style('text-transform', 'capitalize')
+      .attr("y", function (d, i) { return info_y * 1.6 + height1 * 0.13 * i });
+
+
+
+
+  }
+
+
+  requestData(); // execute
+
+
+  function getAngle() {
+    const url = '/cict/app/angle/';
+    fetch(url)
+      .then(resultado => resultado.json())
+      .then(datos => {
+        angleInfo = JSON.parse(datos.data);
+        angle = angleInfo.TimeSeriesDataPoints;
+
+        [MOR, CHPAS, GUAD, CDMX, MTREY, MXTLAN, CHMAL, SLV, TMP, CDJRZ, MNZLO] = angle;
+        /*301,11,63,90,85,58,53,68/json"
+        301: Morelia, Michoacan  DPMU
+        11: Morelia, Michoacan  1408 -- Chiapas
+        63: Guadalajara, Jalisco  1378
+        90: UNAM, Mexico City (old 44) 1385
+        85: Monterrey, Nuevo León 1389
+        58: Mazatlan, Sinaloa 1422
+        53: Chetumal, Quintana Roo 1424
+        68: El Salvador, El Salvador 1628 */
+
+        angle = [(CHMAL.Value).toFixed(2), (MTREY.Value).toFixed(2), (MOR.Value).toFixed(2), (GUAD.Value).toFixed(2), (MXTLAN.Value).toFixed(2),
+        (SLV.Value).toFixed(2), (CHPAS.Value).toFixed(2), (CDJRZ.Value).toFixed(2), (CDMX.Value).toFixed(2), (TMP.Value).toFixed(2), (MNZLO.Value).toFixed(2)]
+        data = update_data()
+        arrow_class = d3.select("#window_info")
+        arrow = arrow_class.selectAll('line')
+        //console.log(arrow)
+        arrow.data(angle)
+        arrow.attr("transform", function (d) { return `rotate(${-d} ${cx_ph} ${cy_ph})` })
+      })
+
+
+  }
+
+  function getAttr() {
+
+    const url_freq = '/cict/app/frequency/';
+
+    fetch(url_freq)
+      .then(resultado => resultado.json())
+      .then(datos => {
+        PMU = JSON.parse(datos.data);
+        perPMU = PMU.TimeSeriesDataPoints;
+        [MOR, CHPAS, GUAD, CDMX, MTREY, MXTLAN, CHMAL, SLV, TMP, CDJRZ, MNZLO] = perPMU;
+
+        /*297,646,59,86,81,54,49,631/json"
+        297: Morelia, Michoacan  DPMU
+        646: Morelia, Michoacan  1408 --Chiapas
+        59: Guadalajara, Jalisco  1378
+        86: UNAM, Mexico City (old 44) 1385
+        81: Monterrey, Nuevo León 1389
+        54: Mazatlan, Sinaloa 1422
+        49: Chetumal, Quintana Roo 1424
+        631: El Salvador, El Salvador 1628 */
+
+        Freq = [GUAD.Value, CDMX.Value, MTREY.Value, MOR.Value, MXTLAN.Value, CHMAL.Value, SLV.Value, CHPAS.Value, CDJRZ.Value, TMP.Value, MNZLO.Value]
+        data = update_data()
+
+      })
+
+    d3.select(".location").text(`${data[current_id].id}`)
+    d3.select(".lat").text(`${data[current_id].lat}°`)
+    d3.select(".lon").text(`${data[current_id].lon}°`)
+    d3.select(".frequency").text(`${(data[current_id].freq)} Hz`)
+    d3.select(".angle").text(`${(data[current_id].angle)}°`)
+
+  }
+
+
+
+
+  let socket = new WebSocket('ws://148.216.38.78/ws/polData/');
+  socket.onopen = function (e) {
 
   };
 
-  socket.onclose = function(e){
-      alert('Connection CLosed');
+  var chart_x = width * 0.015
+  var chart_y = height * 0.55
+  var width_01 = width * 0.37
+  var height_01 = height * 0.37
+
+
+
+
+
+  socket.onmessage = function (e) {
+
+    var recData = JSON.parse(e.data);
+
+    //UPDATE RELATIVE ANGLE 
+    the_text = d3.selectAll(".text1")
+    angleT = the_text.selectAll("text")
+    angleT.data(recData.value);
+    angleT.text(function (d) { return (`${d}°`); });
+
   };
-      
-    /*  function renderLine(data_chart, svg_chart_line) {
-        var lines = svg_chart_line.selectAll('line').data(data_chart)
-    
-        lines.enter().append('line')
-        .attr("style", "stroke:rgb(256,0,0);stroke-width:2")
-        .attr("x1", (d, i) => chart_x*3 + (i-1) * 15 )
-        .attr("y1", (d, i) => (isNaN(data_chart[i-1]) ? 100 + chart_y*1.3  : 100 - data_chart[i-1]*3 + chart_y*1.3) )
-        .attr("x2", (d, i) => chart_x*3 + i * 15 )
-        .attr("y2", (d) => 100 - d*3 + chart_y*1.3)
-      
-        // update
-        lines.transition().duration(0)
-        .attr("x1", (d, i) => chart_x*3 + (i-1) * 15 )
-        .attr("y1", (d, i) => (isNaN(data_chart[i-1]) ? 100 + chart_y*1.3  : 100 - data_chart[i-1]*3 + chart_y*1.3) )
-        .attr("x2", (d, i) => chart_x*3 + i * 15 )
-        .attr("y2", (d) => 100 - d*3 + chart_y*1.3)
 
-        // exit
-        lines.exit().remove();
+  socket.onclose = function (e) {
+    alert('Connection CLosed');
+  };
 
-      } */
 
-	  
-	  $(document).ready(function(){
-      setInterval(getAttr,1000);
-      setInterval(getAngle,1000);
-      }); 
 
-     
-    
-      
-     
-     
-      </script>
+  $(document).ready(function () {
+    setInterval(getAttr, 1000);
+    setInterval(getAngle, 1000);
+  });
 
-<script src="{% static 'media/js/script.js'%}" ></script>
+
+
+
+
+
+</script>
+
+<script src="{% static 'media/js/script.js'%}"></script>
 {% endblock %}

@@ -92,7 +92,7 @@ def Zonemap(request):
 def frequency(request):
     session=requests.Session()
     session.auth=wauth('potencia2021','W@ms_project202x')
-    url="http://148.216.38.78:6152/historian/timeseriesdata/read/current/171,7,59,201,81,54,49,64,256,246,286/json"
+    url="http://148.216.38.78:6152/historian/timeseriesdata/read/current/646,7,59,201,81,54,49,631,806,796,286,786/json"
     r=session.get(url)
     source=(r.content)
     source=json.loads(r.content)
@@ -102,7 +102,7 @@ def frequency(request):
 def angle(request):
     session=requests.Session()
     session.auth=wauth('potencia2021','W@ms_project202x')
-    url="http://localhost:6152/historian/timeseriesdata/read/current/175,11,63,205,85,58,53,68,260,250,290/json"
+    url="http://localhost:6152/historian/timeseriesdata/read/current/650,11,63,205,85,58,53,635,260,250,290/json"
     r=session.get(url)
     source=(r.content)
     source=json.loads(r.content)
