@@ -17,11 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from RTangle import views
+from openpdc import views
 #from django.conf.urls.static import static
 
 urlpatterns = [
     path('cict/app/', include('affinity.urls')),
     path('cict/roma/', include('roma.urls')),
     path('cict/app/', include('RTangle.urls')),
+    path('cict/openpdc/', include('openpdc.urls')),
     path('cict/admin/', admin.site.urls),
 ] #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

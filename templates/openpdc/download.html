@@ -1,0 +1,32 @@
+{% extends "basecats.html" %}
+{% block title %}
+WAMS México - Download data
+{% endblock %}
+{% block content %}
+<div class='fixed-header'>
+   <div class='container'>
+      WAMS Mexico Downlad PMU Data
+      <form method='POST' enctype='multipart/form-data'>
+         {% csrf_token %}
+         <table>
+            <label for="from">From:</label>
+            <input type="date" id="from" name="from"><br />
+            {% for pmu in pmus %}
+            <input type="checkbox" id="{{pmu.0}}" name="pmus" value="{{pmu.0}}">
+            <label for="{{pmu.0}}">{{pmu.1}}</label><br>
+            {% endfor %}
+            <input type="submit" value="submit">
+      </form>
+      {{start_date}}<br />
+      {{end_date}}<br />
+      {{df.head}}
+   </div>
+</div>
+
+<div class='fixed-footer'>
+   <div class='container'>
+      Web-based Wide-Area Monitoring Platform PMU Data <br>
+      Last update: 14-march-2025
+   </div>
+</div>
+{% endblock %}
