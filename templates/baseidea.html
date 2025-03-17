@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+   <meta charset='utf-8'>
+   <title>WAMS México - IDEA</title>
+   
+   <!-- Fuente y estilo para mejorar la presentación -->
+   <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css'>
+   <style>
+       body {
+            padding-top: 70px; /* Espaciado superior para evitar que el header lo cubra */
+            padding-bottom: 50px;
+       }
+       .fixed-header, .fixed-footer {
+            width: 100%;
+            position: fixed;        
+            background: #333;
+            padding: 2px;
+            color: #fff;
+            text-align: center;
+       }
+       .fixed-header { top: 0; font-size: 18px; }
+       .fixed-footer { bottom: 0; font-size: 15px; }
+   </style>
+   
+   <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+
+   <script>
+    function updateForm() {
+        let method = document.getElementById('method').value;
+        method = parseInt(method, 10);
+
+        // Fs siempre visible
+        document.getElementById('fsRow').style.display = 'table-row'; 
+        
+        // LFFT solo visible cuando el método es FFT (1)
+        document.getElementById('lfftRow').style.display = (method === 1) ? 'table-row' : 'none'; 
+        
+        // Tolerance solo visible cuando el método es Matrix Pencil (0)
+        document.getElementById('toleranceRow').style.display = (method === 0) ? 'table-row' : 'none'; 
+    }
+
+    function mostrarGrafico() {
+        var selector = document.getElementById("selectorGraficos");
+        var imagenSeleccionada = selector.value;
+        var imagenGrafico = document.getElementById("imagenGrafico");
+
+        if (imagenSeleccionada && imagenGrafico) {
+            imagenGrafico.src = "data:image/png;base64," + imagenSeleccionada;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let graficosSection = document.getElementById("graficosSection");
+
+        // Mostrar la sección de gráficos solo si hay datos
+        if (graficosSection && "{{ graficos_generados|length }}" > 0) {
+            graficosSection.style.display = "block";
+        }
+    });
+   </script>
+</head>
+
+<body onload="updateForm()">
+
+   <!-- Encabezado fijo -->
+   <div class='fixed-header'>
+       <h2>WAMS México - IDEA</h2>
+   </div>
+
+   <!-- Formulario para subir el archivo -->
+   <form method='POST' enctype='multipart/form-data'>
+       {% csrf_token %}
+       <input type='file' name='examinar' accept='.csv'>
+       <br>
+       <input type='submit' name='upload' value='Upload' style='width: 80px'>
+       {% if file_name %}
+           <label>File loaded into memory: {{ file_name }}</label>
+       {% endif %}
+   </form>
+   
+   <!-- Formulario de configuración y análisis -->
+   <form method='POST'>
+       {% csrf_token %}
+       
+       {% if file_name %}
+           <input type="hidden" name="file_name" value="{{ file_name }}">
+           <input type="hidden" name="signals_name" value="{{ signals_name }}">
+       {% endif %}
+       
+       <table>
+           <!-- Selector de Método -->
+           <tr>
+               <td><b>Method:</b></td>
+               <td>
+                   <select name='method' id='method' onchange='updateForm()'>
+                       <option value='2'> Min-Max </option>
+                       <option value='1'> FFT </option>
+                       <option value='0'> Matrix Pencil </option>
+                   </select>
+               </td>
+           </tr>
+
+           <!-- Campo Fs (Siempre visible) -->
+           <tr id='fsRow'>
+               <td><b>Fs:</b></td>
+               <td><input type='text' name='fs' value='{{ fs }}'></td>
+           </tr>
+           <tr>
+               <td><b>Window size:</b></td>
+               <td><input type='text' name='windows' value='{{ windows }}'></td>
+           </tr>
+           <tr> 
+               <td><b>Window separation:</b></td>
+               <td><input type='text' name='hwindows' value='{{ hwindows }}'></td>
+           </tr>
+           <tr>
+               <td><b>Umbral (sigma):</b></td>
+               <td><input type='text' name='sigma' value='{{ sigma }}'></td>
+           </tr>
+           <!-- Campo LFFT (Solo para FFT) -->
+           <tr id='lfftRow'>
+               <td><b>LFFT:</b></td>
+               <td><input type='text' name='lfft' value='{{ lfft }}'></td>
+           </tr>
+           <!-- Campo Tolerance (Solo para Matrix Pencil) -->
+           <tr id='toleranceRow'>
+               <td><b>Tolerance:</b></td>
+               <td><input type='text' name='tolerance' value='{{ tolerance }}'></td>
+           </tr>
+       </table>
+
+       <br>
+       <!-- Botones de acción -->
+       <input type='submit' name='analyze' value='Analyze' style='width: 100px'>
+       <input type='submit' name='clear' value='Clear' style='width: 100px'>
+   </form>
+
+   <!-- Sección de gráficos (oculta hasta que termine el análisis) -->
+   <div id="graficosSection" style="display: none;">
+       <h3>Gráficos Generados</h3>
+       <label for="selectorGraficos">Selecciona un gráfico:</label>
+       <select id="selectorGraficos" onchange="mostrarGrafico()">
+           {% for nombre, imagen in graficos_generados %}
+               <option value="{{ imagen }}">{{ nombre }}</option>
+           {% endfor %}
+       </select>
+
+       <h2>Gráfico Seleccionado</h2>
+       <img id="imagenGrafico" src="data:image/png;base64,{{ graficos_generados.0.1|default:'' }}" alt="Gráfico">
+   </div>
+
+   <!-- Enlace a la guía de usuario -->
+   <a href="{% url 'user_guide' %}">User Guide</a>
+
+   <!-- Pie de página -->
+   <div class='fixed-footer'>
+       <p>Web-based Wide-Area Monitoring Platform for Event Detection in Power Systems</p>
+       <p>Last update: 12-marzo-2025</p>
+   </div>
+
+</body>
+</html>
